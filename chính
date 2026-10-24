@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Nhóm & Bài Tập - GitHub Pages</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                
+                <!-- Logo & Group Name -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
+                    <div id="headerLogoContainer" class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-md overflow-hidden flex-shrink-0">
+                        <!-- JS renders Logo image or initials here -->
+                    </div>
+                    <div>
+                        <h1 id="headerGroupName" class="font-bold text-lg text-slate-900 leading-tight">Tên Nhóm</h1>
+                        <p id="headerSlogan" class="text-xs text-slate-500 font-medium">Slogan Nhóm</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs (Desktop) -->
+                <nav class="hidden md:flex space-x-1 lg:space-x-2">
+                    <button onclick="switchTab('home')" id="tab-home" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center space-x-2 transition-all">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                        <span>Trang Chủ</span>
+                    </button>
+                    <button onclick="switchTab('assignments')" id="tab-assignments" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center space-x-2 transition-all">
+                        <i data-lucide="book-open" class="w-4 h-4"></i>
+                        <span>Bài Tập</span>
+                    </button>
+                    <button onclick="switchTab('presentations')" id="tab-presentations" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center space-x-2 transition-all">
+                        <i data-lucide="presentation" class="w-4 h-4"></i>
+                        <span>Bài Thuyết Trình</span>
+                    </button>
+                    <button onclick="switchTab('settings')" id="tab-settings" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center space-x-2 transition-all">
+                        <i data-lucide="settings" class="w-4 h-4"></i>
+                        <span>Cài Đặt</span>
+                    </button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="p-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 focus:outline-none">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-slate-200 bg-white px-4 pt-2 pb-4 space-y-1 shadow-lg">
+            <button onclick="switchTab('home')" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center space-x-2">
+                <i data-lucide="home" class="w-4 h-4"></i>
+                <span>Trang Chủ</span>
+            </button>
+            <button onclick="switchTab('assignments')" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center space-x-2">
+                <i data-lucide="book-open" class="w-4 h-4"></i>
+                <span>Bài Tập</span>
+            </button>
+            <button onclick="switchTab('presentations')" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center space-x-2">
+                <i data-lucide="presentation" class="w-4 h-4"></i>
+                <span>Bài Thuyết Trình</span>
+            </button>
+            <button onclick="switchTab('settings')" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center space-x-2">
+                <i data-lucide="settings" class="w-4 h-4"></i>
+                <span>Cài Đặt</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <!-- 1. TRANG CHỦ (HOME) -->
+        <section id="view-home" class="tab-view space-y-8">
+            <!-- Hero Banner / Group Info -->
+            <div class="bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 rounded-3xl p-8 sm:p-10 text-white shadow-xl relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="relative z-10 max-w-3xl space-y-4">
+                    <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold tracking-wide uppercase inline-block">Trang Nhóm Học Tập</span>
+                    <h2 id="homeGroupName" class="text-3xl sm:text-5xl font-extrabold tracking-tight">Tên Nhóm</h2>
+                    <p id="homeSlogan" class="text-indigo-100 text-lg sm:text-xl font-medium italic">"Slogan của nhóm"</p>
+                    <div class="pt-2 flex items-center space-x-2 text-indigo-200 text-sm sm:text-base">
+                        <i data-lucide="folder-git-2" class="w-5 h-5 flex-shrink-0"></i>
+                        <span>Đề tài / Lĩnh vực: <strong id="homeTopic" class="text-white font-semibold">Chưa thiết lập</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thành Viên Nhóm (GIỮ NHƯ CŨ TRÊN TRANG CHỦ) -->
+            <div class="space-y-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                            <i data-lucide="users" class="w-6 h-6 text-indigo-600"></i>
+                            Thành Viên Nhóm
+                        </h3>
+                        <p class="text-slate-500 text-sm">Danh sách các thành viên đóng góp trong nhóm</p>
+                    </div>
+                </div>
+
+                <!-- Grid Cards Thành Viên -->
+                <div id="membersGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                    <!-- Dynamic rendering via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. BÀI TẬP (ASSIGNMENTS) -->
+        <section id="view-assignments" class="tab-view hidden space-y-6">
+            
+            <!-- Views Inside Assignments Tab: Grid View OR Detail View -->
+            
+            <!-- 2A. LIST VIEW -->
+            <div id="assignmentListView" class="space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Danh Sách Bài Tập</h2>
+                        <p class="text-slate-500 text-sm mt-1">Chọn một bài tập bất kỳ để xem câu hỏi Luyện Tập & Vận Dụng</p>
+                    </div>
+                    <button onclick="addNewAssignment()" class="inline-flex items-center justify-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2.5 rounded-xl shadow-md transition-all active:scale-95">
+                        <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                        <span>Thêm Bài Tập Mới</span>
+                    </button>
+                </div>
+
+                <!-- Grid Bài tập 1..N -->
+                <div id="assignmentsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                    <!-- Dynamic JS rendering -->
+                </div>
+            </div>
+
+            <!-- 2B. DETAIL VIEW -->
+            <div id="assignmentDetailView" class="hidden space-y-6">
+                <div class="flex items-center justify-between bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <button onclick="backToAssignmentList()" class="inline-flex items-center space-x-2 text-slate-600 hover:text-indigo-600 font-medium px-3 py-2 rounded-lg hover:bg-slate-100 transition">
+                        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                        <span>Quay lại danh sách bài tập</span>
+                    </button>
+                    <span id="detailAssignmentBadge" class="bg-indigo-100 text-indigo-700 font-bold px-3 py-1 rounded-full text-xs uppercase tracking-wider">Bài Tập</span>
+                </div>
+
+                <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <!-- Title Editor -->
+                    <div class="space-y-2 border-b border-slate-100 pb-6">
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Tên Bài Tập</label>
+                        <input type="text" id="detailTitleInput" class="text-2xl sm:text-3xl font-extrabold text-slate-900 w-full border-b-2 border-transparent hover:border-slate-300 focus:border-indigo-600 focus:outline-none transition py-1 bg-transparent" placeholder="Nhập tên bài tập..." onchange="saveCurrentAssignmentDetail()">
+                    </div>
+
+                    <!-- Phần 1: Luyện tập -->
+                    <div class="space-y-3 bg-amber-50/50 p-6 rounded-xl border border-amber-200/60">
+                        <div class="flex items-center space-x-2 text-amber-800 font-bold text-lg">
+                            <i data-lucide="pen-tool" class="w-5 h-5 text-amber-600"></i>
+                            <h3>Phần 1: Luyện tập</h3>
+                        </div>
+                        <p class="text-xs text-amber-700/80">Cụ thể hóa các bài tập thực hành, câu hỏi trắc nghiệm, bài tập tự luyện và đáp án.</p>
+                        <textarea id="detailPracticeInput" rows="6" class="w-full bg-white p-4 rounded-xl border border-amber-200 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 focus:outline-none text-slate-800 leading-relaxed shadow-inner" placeholder="Nhập nội dung Luyện tập (Câu hỏi, bài tập, lời giải)..." onchange="saveCurrentAssignmentDetail()"></textarea>
+                    </div>
+
+                    <!-- Phần 2: Vận dụng -->
+                    <div class="space-y-3 bg-emerald-50/50 p-6 rounded-xl border border-emerald-200/60">
+                        <div class="flex items-center space-x-2 text-emerald-800 font-bold text-lg">
+                            <i data-lucide="lightbulb" class="w-5 h-5 text-emerald-600"></i>
+                            <h3>Phần 2: Vận dụng</h3>
+                        </div>
+                        <p class="text-xs text-emerald-700/80">Nội dung nâng cao, bài toán mở rộng, thực tế và ứng dụng liên hệ.</p>
+                        <textarea id="detailApplicationInput" rows="6" class="w-full bg-white p-4 rounded-xl border border-emerald-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none text-slate-800 leading-relaxed shadow-inner" placeholder="Nhập nội dung Vận dụng (Nâng cao, liên hệ thực tế)..." onchange="saveCurrentAssignmentDetail()"></textarea>
+                    </div>
+
+                    <div class="flex justify-end pt-2">
+                        <button onclick="saveCurrentAssignmentDetail(); showNotification('Đã lưu bài tập thành công!');" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-xl shadow-md transition flex items-center space-x-2">
+                            <i data-lucide="save" class="w-4 h-4"></i>
+                            <span>Lưu Nội Dung</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- 3. BÀI THUYẾT TRÌNH (PRESENTATIONS) -->
+        <section id="view-presentations" class="tab-view hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900">Bài Thuyết Trình</h2>
+                    <p class="text-slate-500 text-sm mt-1">Quản lý và trình chiếu các file Canva, Google Slides, PDF hoặc Video</p>
+                </div>
+                <button onclick="openAddPresentationModal()" class="inline-flex items-center justify-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2.5 rounded-xl shadow-md transition-all">
+                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                    <span>Thêm Bài Thuyết Trình</span>
+                </button>
+            </div>
+
+            <!-- Presentations Grid -->
+            <div id="presentationsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- JS dynamic render -->
+            </div>
+        </section>
+
+        <!-- 4. CÀI ĐẶT (SETTINGS) -->
+        <section id="view-settings" class="tab-view hidden space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm max-w-3xl mx-auto space-y-6">
+                <div class="border-b border-slate-200 pb-4">
+                    <h2 class="text-2xl font-bold text-slate-900">Cài Đặt Thông Tin Nhóm</h2>
+                    <p class="text-slate-500 text-sm">Cấu hình tên nhóm, logo, slogan và đề tài hiển thị toàn trang</p>
+                </div>
+
+                <form onsubmit="saveSettings(event)" class="space-y-6">
+                    <!-- Logo Upload -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-slate-700">Logo Nhóm</label>
+                        <div class="flex items-center space-x-4">
+                            <div id="settingsLogoPreview" class="w-16 h-16 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-bold text-2xl shadow-inner overflow-hidden flex-shrink-0">
+                                <!-- JS Preview -->
+                            </div>
+                            <div class="space-y-1">
+                                <input type="file" id="settingsLogoInput" accept="image/*" class="text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+                                <p class="text-xs text-slate-400">Khuyến nghị ảnh vuông (PNG, JPG, SVG). Lưu dạng base64 trong LocalStorage.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Group Name -->
+                    <div class="space-y-1">
+                        <label for="settingsGroupName" class="block text-sm font-semibold text-slate-700">Tên Nhóm</label>
+                        <input type="text" id="settingsGroupName" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none transition">
+                    </div>
+
+                    <!-- Slogan -->
+                    <div class="space-y-1">
+                        <label for="settingsSlogan" class="block text-sm font-semibold text-slate-700">Slogan</label>
+                        <input type="text" id="settingsSlogan" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none transition">
+                    </div>
+
+                    <!-- Topic -->
+                    <div class="space-y-1">
+                        <label for="settingsTopic" class="block text-sm font-semibold text-slate-700">Đề Tài / Lĩnh Vực</label>
+                        <input type="text" id="settingsTopic" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none transition">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-4 flex justify-end">
+                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-xl shadow-md transition flex items-center space-x-2">
+                            <i data-lucide="save" class="w-4 h-4"></i>
+                            <span>Lưu Cài Đặt</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-slate-500 text-sm space-y-1">
+            <p>© 2026 Website Nhóm. Sẵn sàng đưa lên GitHub Pages.</p>
+            <p class="text-xs text-slate-400">Toàn bộ dữ liệu được lưu trữ tự động trong Trình duyệt (LocalStorage)</p>
+        </div>
+    </footer>
+
+    <!-- MODAL: EDIT MEMBER PROFILE -->
+    <div id="memberModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-5 animate-in fade-in zoom-in duration-200">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="text-lg font-bold text-slate-900">Chỉnh Sửa Profile Thành Viên</h3>
+                <button onclick="closeMemberModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <form onsubmit="saveMemberProfile(event)" class="space-y-4">
+                <input type="hidden" id="modalMemberId">
+
+                <!-- Avatar Upload -->
+                <div class="flex items-center space-x-4">
+                    <img id="modalMemberAvatarPreview" src="" class="w-16 h-16 rounded-full object-cover border-2 border-indigo-500 shadow">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Đổi Avatar</label>
+                        <input type="file" id="modalMemberAvatarInput" accept="image/*" class="text-xs text-slate-500 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 cursor-pointer">
+                    </div>
+                </div>
+
+                <!-- Member Name -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Họ & Tên</label>
+                    <input type="text" id="modalMemberName" required class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+
+                <!-- Role -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Chức Vụ / Vai Trò</label>
+                    <input type="text" id="modalMemberRole" required class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Mô Tả Nhiệm Vụ</label>
+                    <textarea id="modalMemberDesc" rows="3" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeMemberModal()" class="px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 text-sm font-medium">Hủy</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow">Lưu Thay Đổi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD PRESENTATION -->
+    <div id="presentationModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 space-y-5">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="text-lg font-bold text-slate-900">Thêm Bài Thuyết Trình</h3>
+                <button onclick="closePresentationModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form onsubmit="savePresentation(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Tên Bài Thuyết Trình</label>
+                    <input type="text" id="presTitle" required placeholder="VD: Thuyết trình Nhóm - Tuần 1" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Đường Dẫn (URL Slides / Video / Canva / Drive)</label>
+                    <input type="url" id="presUrl" required placeholder="https://canva.com/... hoặc https://docs.google.com/presentation/..." class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Mô Tả Ngắn</label>
+                    <textarea id="presDesc" rows="2" placeholder="Nội dung tổng quan bài thuyết trình..." class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closePresentationModal()" class="px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 text-sm font-medium">Hủy</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow">Thêm Mới</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400"></i>
+        <span id="toastMsg" class="text-sm font-medium">Thông báo</span>
+    </div>
+
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        // --- DEFAULT DATA SEEDS ---
+        const DEFAULT_GROUP = {
+            name: "Nhóm Đột Phá",
+            slogan: "Sáng Tạo - Kết Nối - Thành Công",
+            topic: "Phát Triển Ứng Dụng Web GitHub Pages",
+            logo: "" // base64 string
+        };
+
+        const DEFAULT_MEMBERS = [
+            { id: "m1", name: "Nguyễn Văn A", role: "Nhóm Trưởng", desc: "Quản lý tiến độ, phân công bài tập & tổng hợp.", avatar: "https://placehold.co/150x150/6366f1/ffffff?text=A" },
+            { id: "m2", name: "Trần Thị B", role: "Thành Viên", desc: "Soạn thảo bài tập Luyện tập & Vận dụng.", avatar: "https://placehold.co/150x150/ec4899/ffffff?text=B" },
+            { id: "m3", name: "Lê Văn C", role: "Thành Viên", desc: "Thiết kế Slides Canva & Thuyết trình.", avatar: "https://placehold.co/150x150/10b981/ffffff?text=C" },
+            { id: "m4", name: "Phạm Thị D", role: "Thành Viên", desc: "Kiểm tra đáp án & biên tập nội dung.", avatar: "https://placehold.co/150x150/f59e0b/ffffff?text=D" },
+            { id: "m5", name: "Hoàng Văn E", role: "Thành Viên", desc: "Đưa dữ liệu lên website GitHub Pages.", avatar: "https://placehold.co/150x150/8b5cf6/ffffff?text=E" }
+        ];
+
+        // Generate default 28 Assignments
+        function generateDefaultAssignments() {
+            const list = [];
+            for (let i = 1; i <= 28; i++) {
+                list.push({
+                    id: `a${i}`,
+                    number: i,
+                    title: `Bài ${i}`,
+                    practice: `Nội dung luyện tập cho Bài ${i}:\n- Câu 1: Bài tập thực hành kiến thức cơ bản.\n- Câu 2: Câu hỏi tự luyện trắc nghiệm.\n- Đáp án: Đang cập nhật...`,
+                    application: `Nội dung vận dụng cho Bài ${i}:\n- Bài toán thực tế mở rộng.\n- Liên hệ ứng dụng trong dự án nhóm.`
+                });
+            }
+            return list;
+        }
+
+        const DEFAULT_PRESENTATIONS = [
+            {
+                id: "p1",
+                title: "Thuyết Trình Đề Tài Nhóm - Báo Cáo Giữa Kỳ",
+                url: "https://www.canva.com",
+                desc: "Tổng quan tiến độ thực hiện bài tập từ Bài 1 đến Bài 15."
+            }
+        ];
+
+        // --- APP STATE ---
+        let appState = {
+            group: JSON.parse(localStorage.getItem('app_group')) || DEFAULT_GROUP,
+            members: JSON.parse(localStorage.getItem('app_members')) || DEFAULT_MEMBERS,
+            assignments: JSON.parse(localStorage.getItem('app_assignments')) || generateDefaultAssignments(),
+            presentations: JSON.parse(localStorage.getItem('app_presentations')) || DEFAULT_PRESENTATIONS,
+            currentAssignmentId: null
+        };
+
+        // --- INITIALIZATION ---
+        window.onload = function() {
+            renderHeaderAndGroupInfo();
+            renderMembers();
+            renderAssignmentsGrid();
+            renderPresentations();
+            switchTab('home');
+            lucide.createIcons();
+        };
+
+        function saveStateToLocalStorage() {
+            localStorage.setItem('app_group', JSON.stringify(appState.group));
+            localStorage.setItem('app_members', JSON.stringify(appState.members));
+            localStorage.setItem('app_assignments', JSON.stringify(appState.assignments));
+            localStorage.setItem('app_presentations', JSON.stringify(appState.presentations));
+        }
+
+        // --- NAVIGATION LOGIC ---
+        function switchTab(tabId) {
+            // Hide all views
+            document.querySelectorAll('.tab-view').forEach(view => view.classList.add('hidden'));
+            
+            // Unhighlight all buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-50', 'text-indigo-600');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-100');
+            });
+
+            // Show current view
+            const activeView = document.getElementById(`view-${tabId}`);
+            if (activeView) activeView.classList.remove('hidden');
+
+            // Highlight current tab button
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
+                activeBtn.classList.add('bg-indigo-50', 'text-indigo-600');
+            }
+
+            // Mobile menu hide
+            document.getElementById('mobileMenu').classList.add('hidden');
+
+            // If switching to settings, fill form
+            if (tabId === 'settings') {
+                fillSettingsForm();
+            }
+
+            // Re-render lucide icons
+            setTimeout(() => lucide.createIcons(), 50);
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
+
+        // --- RENDER HEADER & GROUP INFO ---
+        function renderHeaderAndGroupInfo() {
+            const { name, slogan, topic, logo } = appState.group;
+            
+            // Header
+            document.getElementById('headerGroupName').innerText = name || "Tên Nhóm";
+            document.getElementById('headerSlogan').innerText = slogan || "Slogan";
+
+            const logoContainer = document.getElementById('headerLogoContainer');
+            if (logo) {
+                logoContainer.innerHTML = `<img src="${logo}" class="w-full h-full object-cover">`;
+            } else {
+                logoContainer.innerHTML = (name || "N").charAt(0).toUpperCase();
+            }
+
+            // Home Page Hero
+            document.getElementById('homeGroupName').innerText = name || "Tên Nhóm";
+            document.getElementById('homeSlogan').innerText = `"${slogan || 'Slogan của nhóm'}"`;
+            document.getElementById('homeTopic').innerText = topic || "Chưa thiết lập";
+        }
+
+        // --- RENDER MEMBERS (TRANG CHỦ - NHƯ CŨ) ---
+        function renderMembers() {
+            const container = document.getElementById('membersGrid');
+            container.innerHTML = '';
+
+            appState.members.forEach(member => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4 text-center group relative overflow-hidden";
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="relative w-20 h-20 mx-auto">
+                            <img src="${member.avatar}" alt="${member.name}" class="w-20 h-20 rounded-full object-cover border-2 border-indigo-500 shadow-sm mx-auto">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-base leading-snug">${member.name}</h4>
+                            <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-600 border border-indigo-100">${member.role}</span>
+                        </div>
+                        <p class="text-xs text-slate-500 line-clamp-3">${member.desc || 'Chưa có mô tả'}</p>
+                    </div>
+                    <button onclick="openMemberModal('${member.id}')" class="w-full py-2 bg-slate-50 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 rounded-xl text-xs font-semibold transition border border-slate-200 flex items-center justify-center gap-1.5">
+                        <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                        <span>Sửa Profile</span>
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // MEMBER MODAL HANDLERS
+        function openMemberModal(id) {
+            const member = appState.members.find(m => m.id === id);
+            if (!member) return;
+
+            document.getElementById('modalMemberId').value = member.id;
+            document.getElementById('modalMemberName').value = member.name;
+            document.getElementById('modalMemberRole').value = member.role;
+            document.getElementById('modalMemberDesc').value = member.desc;
+            document.getElementById('modalMemberAvatarPreview').src = member.avatar;
+
+            document.getElementById('memberModal').classList.remove('hidden');
+        }
+
+        function closeMemberModal() {
+            document.getElementById('memberModal').classList.add('hidden');
+        }
+
+        function saveMemberProfile(e) {
+            e.preventDefault();
+            const id = document.getElementById('modalMemberId').value;
+            const member = appState.members.find(m => m.id === id);
+
+            if (member) {
+                member.name = document.getElementById('modalMemberName').value;
+                member.role = document.getElementById('modalMemberRole').value;
+                member.desc = document.getElementById('modalMemberDesc').value;
+
+                // Avatar file upload check
+                const avatarInput = document.getElementById('modalMemberAvatarInput');
+                if (avatarInput.files && avatarInput.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        member.avatar = evt.target.result;
+                        finishMemberSave();
+                    };
+                    reader.readAsDataURL(avatarInput.files[0]);
+                    return;
+                }
+            }
+            finishMemberSave();
+        }
+
+        function finishMemberSave() {
+            saveStateToLocalStorage();
+            renderMembers();
+            closeMemberModal();
+            showNotification("Đã cập nhật profile thành viên!");
+        }
+
+        // --- RENDER ASSIGNMENTS (BÀI TẬP - NHƯ CŨ) ---
+        function renderAssignmentsGrid() {
+            const grid = document.getElementById('assignmentsGrid');
+            grid.innerHTML = '';
+
+            appState.assignments.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-300 hover:shadow-md transition cursor-pointer group flex flex-col justify-between space-y-4";
+                card.onclick = () => openAssignmentDetail(item.id);
+
+                card.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 font-bold text-xs flex items-center justify-center border border-indigo-100">${item.number}</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-1 transition"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-base group-hover:text-indigo-600 transition line-clamp-2">${item.title}</h4>
+                    </div>
+                    <div class="pt-2 border-t border-slate-100 text-xs text-slate-400 flex items-center space-x-2">
+                        <i data-lucide="file-text" class="w-3.5 h-3.5 text-slate-400"></i>
+                        <span>Luyện tập & Vận dụng</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function addNewAssignment() {
+            const newNum = appState.assignments.length + 1;
+            const newAssignment = {
+                id: `a${Date.now()}`,
+                number: newNum,
+                title: `Bài ${newNum}`,
+                practice: `Nội dung Luyện tập cho Bài ${newNum}...`,
+                application: `Nội dung Vận dụng cho Bài ${newNum}...`
+            };
+            appState.assignments.push(newAssignment);
+            saveStateToLocalStorage();
+            renderAssignmentsGrid();
+            showNotification(`Đã thêm Bài ${newNum} mới!`);
+        }
+
+        function openAssignmentDetail(id) {
+            const item = appState.assignments.find(a => a.id === id);
+            if (!item) return;
+
+            appState.currentAssignmentId = id;
+
+            document.getElementById('detailAssignmentBadge').innerText = `BÀI SỐ ${item.number}`;
+            document.getElementById('detailTitleInput').value = item.title;
+            document.getElementById('detailPracticeInput').value = item.practice || '';
+            document.getElementById('detailApplicationInput').value = item.application || '';
+
+            document.getElementById('assignmentListView').classList.add('hidden');
+            document.getElementById('assignmentDetailView').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function backToAssignmentList() {
+            document.getElementById('assignmentDetailView').classList.add('hidden');
+            document.getElementById('assignmentListView').classList.remove('hidden');
+            renderAssignmentsGrid();
+        }
+
+        function saveCurrentAssignmentDetail() {
+            const id = appState.currentAssignmentId;
+            const item = appState.assignments.find(a => a.id === id);
+            if (!item) return;
+
+            item.title = document.getElementById('detailTitleInput').value;
+            item.practice = document.getElementById('detailPracticeInput').value;
+            item.application = document.getElementById('detailApplicationInput').value;
+
+            saveStateToLocalStorage();
+        }
+
+        // --- RENDER PRESENTATIONS ---
+        function renderPresentations() {
+            const grid = document.getElementById('presentationsGrid');
+            grid.innerHTML = '';
+
+            if (appState.presentations.length === 0) {
+                grid.innerHTML = `<div class="col-span-2 text-center py-10 text-slate-400">Chưa có bài thuyết trình nào. Bấm nút phía trên để thêm.</div>`;
+                return;
+            }
+
+            appState.presentations.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between";
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
+                                <i data-lucide="presentation" class="w-6 h-6"></i>
+                            </div>
+                            <button onclick="deletePresentation('${p.id}')" class="text-slate-300 hover:text-red-500 p-1 rounded-lg transition">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-lg">${p.title}</h3>
+                        <p class="text-xs text-slate-500">${p.desc || 'Không có mô tả'}</p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100">
+                        <a href="${p.url}" target="_blank" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center space-x-2 shadow-sm">
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                            <span>Xem Thuyết Trình / Slides</span>
+                        </a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function openAddPresentationModal() {
+            document.getElementById('presTitle').value = '';
+            document.getElementById('presUrl').value = '';
+            document.getElementById('presDesc').value = '';
+            document.getElementById('presentationModal').classList.remove('hidden');
+        }
+
+        function closePresentationModal() {
+            document.getElementById('presentationModal').classList.add('hidden');
+        }
+
+        function savePresentation(e) {
+            e.preventDefault();
+            const newPres = {
+                id: `p${Date.now()}`,
+                title: document.getElementById('presTitle').value,
+                url: document.getElementById('presUrl').value,
+                desc: document.getElementById('presDesc').value
+            };
+            appState.presentations.push(newPres);
+            saveStateToLocalStorage();
+            renderPresentations();
+            closePresentationModal();
+            showNotification("Đã thêm bài thuyết trình mới!");
+        }
+
+        function deletePresentation(id) {
+            if (confirm("Bạn có chắc chắn muốn xóa bài thuyết trình này?")) {
+                appState.presentations = appState.presentations.filter(p => p.id !== id);
+                saveStateToLocalStorage();
+                renderPresentations();
+                showNotification("Đã xóa bài thuyết trình!");
+            }
+        }
+
+        // --- SETTINGS LOGIC ---
+        function fillSettingsForm() {
+            document.getElementById('settingsGroupName').value = appState.group.name || '';
+            document.getElementById('settingsSlogan').value = appState.group.slogan || '';
+            document.getElementById('settingsTopic').value = appState.group.topic || '';
+
+            const preview = document.getElementById('settingsLogoPreview');
+            if (appState.group.logo) {
+                preview.innerHTML = `<img src="${appState.group.logo}" class="w-full h-full object-cover">`;
+            } else {
+                preview.innerHTML = (appState.group.name || "N").charAt(0).toUpperCase();
+            }
+        }
+
+        function saveSettings(e) {
+            e.preventDefault();
+            appState.group.name = document.getElementById('settingsGroupName').value;
+            appState.group.slogan = document.getElementById('settingsSlogan').value;
+            appState.group.topic = document.getElementById('settingsTopic').value;
+
+            const logoInput = document.getElementById('settingsLogoInput');
+            if (logoInput.files && logoInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    appState.group.logo = evt.target.result;
+                    finishSettingsSave();
+                };
+                reader.readAsDataURL(logoInput.files[0]);
+                return;
+            }
+
+            finishSettingsSave();
+        }
+
+        function finishSettingsSave() {
+            saveStateToLocalStorage();
+            renderHeaderAndGroupInfo();
+            showNotification("Đã lưu thông tin cài đặt nhóm!");
+        }
+
+        // --- TOAST NOTIFICATION ---
+        function showNotification(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
