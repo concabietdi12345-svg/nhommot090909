@@ -3,466 +3,249 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NHÓM MỘT PHÁ</title>
-  
-  <!-- 1. Thư viện Tailwind CSS để lên màu & giao diện -->
+  <title>Trang Web Học Tập & Nhóm - Đồng Bộ Firebase</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- 2. Thư viện Icon Lucide -->
   <script src="https://unpkg.com/lucide@latest"></script>
   
+  <!-- 1. TÍCH HỢP THƯ VIỆN FIREBASE (COMPAT) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
   <style>
-    /* Font chữ mượt mà & animation chuyển tab */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-    .tab-content {
-      display: none;
-    }
-    .tab-content.active {
-      display: block;
-      animation: fadeIn 0.2s ease-in-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    body { font-family: 'Inter', sans-serif; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-  <!-- HEADER / NAVIGATION -->
+  <!-- HEADER -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
-        
-        <!-- Logo & Brand Name -->
         <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
-          <div id="brandLogoContainer" class="w-10 h-10 rounded-xl overflow-hidden bg-emerald-500 text-white flex items-center justify-center font-bold text-xl shadow-md border border-emerald-400">
-            <!-- Dynamic Logo -->
-          </div>
+          <div id="brandLogoContainer" class="w-10 h-10 rounded-xl overflow-hidden bg-emerald-500 text-white flex items-center justify-center font-bold text-xl shadow-md">N</div>
           <div>
-            <h1 id="brandNameDisplay" class="font-bold text-lg text-slate-900 leading-tight">Tên Nhóm</h1>
-            <p id="brandSloganDisplay" class="text-xs text-slate-500">Slogan nhóm</p>
+            <h1 id="brandNameDisplay" class="font-bold text-lg text-slate-900 leading-tight">Đang tải...</h1>
+            <p id="brandSloganDisplay" class="text-xs text-slate-500">Đồng bộ tự động Realtime</p>
           </div>
         </div>
-
-        <!-- Navigation Tabs -->
         <nav class="flex items-center gap-1 sm:gap-2">
-          <button onclick="switchTab('home')" id="nav-home" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-emerald-600 bg-emerald-50">
-            <i data-lucide="home" class="w-4 h-4"></i>
-            <span class="hidden md:inline">Trang Chủ</span>
-          </button>
-          
-          <button onclick="switchTab('assignments')" id="nav-assignments" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:bg-slate-100">
-            <i data-lucide="book-open" class="w-4 h-4"></i>
-            <span class="hidden md:inline">Bài Tập</span>
-          </button>
-
-          <button onclick="switchTab('presentations')" id="nav-presentations" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:bg-slate-100">
-            <i data-lucide="presentation" class="w-4 h-4"></i>
-            <span class="hidden md:inline">Thuyết Trình</span>
-          </button>
-
-          <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:bg-slate-100">
-            <i data-lucide="settings" class="w-4 h-4"></i>
-            <span class="hidden md:inline">Cài Đặt</span>
-          </button>
+          <button onclick="switchTab('home')" id="nav-home" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-emerald-600 bg-emerald-50">Trang Chủ</button>
+          <button onclick="switchTab('assignments')" id="nav-assignments" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:bg-slate-100">Bài Tập</button>
+          <button onclick="switchTab('presentations')" id="nav-presentations" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:bg-slate-100">Thuyết Trình</button>
+          <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:bg-slate-100">Cài Đặt</button>
         </nav>
-
       </div>
     </div>
   </header>
 
-  <!-- MAIN CONTENT CONTAINER -->
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
-    <!-- TAB 1: TRANG CHỦ -->
+    <!-- TRANG CHỦ -->
     <section id="tab-home" class="tab-content active space-y-8">
-      <!-- Banner Giới thiệu nhóm -->
-      <div class="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-2xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
-        <div class="relative z-10 max-w-3xl space-y-3">
-          <span class="bg-white/20 text-xs px-3 py-1 rounded-full font-medium backdrop-blur-sm inline-block">Thông Tin Hoạt Động</span>
-          <h2 id="homeGroupName" class="text-2xl sm:text-4xl font-extrabold tracking-tight">Tên Nhóm</h2>
-          <p id="homeGroupSlogan" class="text-emerald-100 italic text-sm sm:text-base">"Slogan của nhóm"</p>
-          
-          <div class="pt-2 border-t border-white/20 flex flex-wrap gap-4 text-xs sm:text-sm text-emerald-100">
-            <div><strong class="text-white">Đề tài / Lĩnh vực:</strong> <span id="homeTopic">Chưa cập nhật</span></div>
-          </div>
-          <p id="homeDescription" class="text-sm text-emerald-50/90 leading-relaxed pt-1">
-            Mô tả ngắn gọn về định hướng và nhiệm vụ học tập của nhóm.
-          </p>
-        </div>
+      <div class="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-2xl p-6 sm:p-8 text-white shadow-lg space-y-3">
+        <span class="bg-white/20 text-xs px-3 py-1 rounded-full font-medium">Thông Tin Hoạt Động</span>
+        <h2 id="homeGroupName" class="text-2xl sm:text-4xl font-extrabold">Nhóm Học Tập</h2>
+        <p id="homeGroupSlogan" class="text-emerald-100 italic">"Cùng nhau chinh phục tri thức!"</p>
+        <div><strong>Đề tài:</strong> <span id="homeTopic">Khoa học & Học tập</span></div>
+        <p id="homeDescription" class="text-sm text-emerald-50">Trang web lưu trữ bài tập và tài liệu chung của nhóm.</p>
       </div>
 
-      <!-- Giới thiệu 5 thành viên -->
       <div class="space-y-4">
-        <div class="flex items-center justify-between">
-          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-            <i data-lucide="users" class="w-5 h-5 text-emerald-600"></i> Thành Viên Nhóm
-          </h3>
-          <span class="text-xs text-slate-500">(Bấm "Chỉnh sửa" để đổi tên, chức vụ hoặc avatar)</span>
-        </div>
-
-        <div id="membersGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          <!-- Rendered via JS -->
-        </div>
+        <h3 class="text-xl font-bold text-slate-900">Thành Viên Nhóm</h3>
+        <div id="membersGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"></div>
       </div>
     </section>
 
-    <!-- TAB 2: BÀI TẬP -->
+    <!-- BÀI TẬP -->
     <section id="tab-assignments" class="tab-content space-y-6">
-      
-      <!-- List View -->
       <div id="assignmentListView" class="space-y-6">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <div>
-            <h2 class="text-2xl font-bold text-slate-900">Danh Sách Bài Tập</h2>
-            <p class="text-slate-500 text-sm">Bấm vào ô để xem phần Luyện tập & Vận dụng</p>
-          </div>
-          <button onclick="addNewAssignment()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg text-sm flex items-center gap-2 shadow-sm transition">
-            <i data-lucide="plus" class="w-4 h-4"></i> Thêm Bài Tập Mới
-          </button>
+        <div class="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <h2 class="text-2xl font-bold text-slate-900">Danh Sách Bài Tập</h2>
+          <button onclick="addNewAssignment()" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">+ Thêm Bài Tập</button>
         </div>
-
-        <div id="assignmentsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <!-- Rendered via JS -->
-        </div>
+        <div id="assignmentsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
       </div>
 
-      <!-- Detail View -->
       <div id="assignmentDetailView" class="hidden space-y-6">
         <div class="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <button onclick="closeAssignmentDetail()" class="text-slate-600 hover:text-emerald-600 font-medium text-sm flex items-center gap-2 transition">
-            <i data-lucide="arrow-left" class="w-4 h-4"></i> Quay lại danh sách
-          </button>
-          <button onclick="saveCurrentAssignmentDetail()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg text-sm flex items-center gap-2 shadow-sm transition">
-            <i data-lucide="save" class="w-4 h-4"></i> Lưu Thay Đổi
-          </button>
+          <button onclick="closeAssignmentDetail()" class="text-emerald-600 font-medium text-sm">← Quay lại danh sách</button>
+          <button onclick="saveCurrentAssignmentDetail()" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">Lưu & Đồng Bộ Với Cả Nhóm</button>
         </div>
-
         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-          <div class="border-b border-slate-100 pb-4">
-            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Tên Bài Tập</label>
-            <input type="text" id="detailTitleInput" class="w-full text-2xl font-bold text-slate-900 border-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 rounded-lg p-1 bg-slate-50">
-          </div>
-
+          <input type="text" id="detailTitleInput" class="w-full text-2xl font-bold border-b pb-2 focus:outline-none">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Phần 1: Luyện tập -->
-            <div class="bg-emerald-50/50 border border-emerald-100 p-5 rounded-xl space-y-3">
-              <div class="flex items-center gap-2 text-emerald-800 font-bold text-lg border-b border-emerald-200/60 pb-2">
-                <i data-lucide="pen-tool" class="w-5 h-5 text-emerald-600"></i> Phần 1: Luyện Tập
-              </div>
-              <p class="text-xs text-slate-500">Nội dung câu hỏi, bài tập trắc nghiệm/tự luận, lời giải mẫu...</p>
-              <textarea id="detailPracticeInput" rows="10" placeholder="Nhập nội dung Luyện tập ở đây..." class="w-full p-3 text-sm bg-white border border-emerald-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-y"></textarea>
+            <div class="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 space-y-2">
+              <h4 class="font-bold text-emerald-800">Phần 1: Luyện Tập</h4>
+              <textarea id="detailPracticeInput" rows="8" class="w-full p-3 border rounded-lg text-sm focus:outline-none"></textarea>
             </div>
-
-            <!-- Phần 2: Vận dụng -->
-            <div class="bg-blue-50/50 border border-blue-100 p-5 rounded-xl space-y-3">
-              <div class="flex items-center gap-2 text-blue-800 font-bold text-lg border-b border-blue-200/60 pb-2">
-                <i data-lucide="rocket" class="w-5 h-5 text-blue-600"></i> Phần 2: Vận Dụng
-              </div>
-              <p class="text-xs text-slate-500">Bài tập nâng cao, liên hệ thực tế, tài liệu đính kèm...</p>
-              <textarea id="detailApplicationInput" rows="10" placeholder="Nhập nội dung Vận dụng ở đây..." class="w-full p-3 text-sm bg-white border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"></textarea>
+            <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100 space-y-2">
+              <h4 class="font-bold text-blue-800">Phần 2: Vận Dụng</h4>
+              <textarea id="detailApplicationInput" rows="8" class="w-full p-3 border rounded-lg text-sm focus:outline-none"></textarea>
             </div>
           </div>
         </div>
       </div>
-
     </section>
 
-    <!-- TAB 3: BÀI THUYẾT TRÌNH -->
+    <!-- THUYẾT TRÌNH -->
     <section id="tab-presentations" class="tab-content space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-        <div>
-          <h2 class="text-2xl font-bold text-slate-900">Bài Thuyết Trình</h2>
-          <p class="text-slate-500 text-sm">Danh sách Slide, Video và Tài liệu thuyết trình</p>
-        </div>
-        <button onclick="addNewPresentation()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg text-sm flex items-center gap-2 shadow-sm transition">
-          <i data-lucide="plus" class="w-4 h-4"></i> Thêm Bài Thuyết Trình
-        </button>
+      <div class="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <h2 class="text-2xl font-bold text-slate-900">Bài Thuyết Trình</h2>
+        <button onclick="addNewPresentation()" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">+ Thêm Bài</button>
       </div>
-
-      <div id="presentationsList" class="space-y-4">
-        <!-- Rendered via JS -->
-      </div>
+      <div id="presentationsList" class="space-y-4"></div>
     </section>
 
-    <!-- TAB 4: CÀI ĐẶT NHÓM -->
-    <section id="tab-settings" class="tab-content space-y-6 max-w-3xl mx-auto">
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-        <h2 class="text-xl font-bold text-slate-900 border-b pb-3 flex items-center gap-2">
-          <i data-lucide="sliders" class="w-5 h-5 text-emerald-600"></i> Cài Đặt Thông Tin Nhóm & Logo
-        </h2>
-
-        <form id="settingsForm" onsubmit="saveSettings(event)" class="space-y-4">
-          <!-- Logo Settings -->
-          <div class="space-y-2">
-            <label class="block text-sm font-medium text-slate-700">Logo Nhóm / Biểu Tượng</label>
-            <div class="flex items-center gap-4">
-              <div id="settingsLogoPreview" class="w-16 h-16 rounded-xl overflow-hidden bg-emerald-500 text-white flex items-center justify-center font-bold text-2xl border">
-                <!-- Preview -->
-              </div>
-              <div class="space-y-1">
-                <input type="file" id="logoFileInput" accept="image/*" class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
-                <p class="text-xs text-slate-400">Khuyên dùng ảnh vuông PNG/JPG</p>
-              </div>
-            </div>
-          </div>
-
+    <!-- CÀI ĐẶT -->
+    <section id="tab-settings" class="tab-content space-y-6 max-w-2xl mx-auto">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <h2 class="text-xl font-bold border-b pb-3">Cài Đặt Thông Tin Nhóm</h2>
+        <form onsubmit="saveSettings(event)" class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Tên Nhóm</label>
-            <input type="text" id="settingGroupName" class="w-full p-2.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <label class="block text-sm font-medium">Tên Nhóm</label>
+            <input type="text" id="settingGroupName" class="w-full p-2 border rounded-lg mt-1">
           </div>
-
           <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Slogan</label>
-            <input type="text" id="settingSlogan" class="w-full p-2.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <label class="block text-sm font-medium">Slogan</label>
+            <input type="text" id="settingSlogan" class="w-full p-2 border rounded-lg mt-1">
           </div>
-
           <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Đề Tài / Lĩnh Vực Hoạt Động</label>
-            <input type="text" id="settingTopic" class="w-full p-2.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <label class="block text-sm font-medium">Đề tài</label>
+            <input type="text" id="settingTopic" class="w-full p-2 border rounded-lg mt-1">
           </div>
-
           <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Mô Tả Giới Thiệu Nhóm</label>
-            <textarea id="settingDescription" rows="4" class="w-full p-2.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
+            <label class="block text-sm font-medium">Mô tả nhóm</label>
+            <textarea id="settingDescription" rows="3" class="w-full p-2 border rounded-lg mt-1"></textarea>
           </div>
-
-          <div class="pt-2 flex justify-end">
-            <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-6 py-2.5 rounded-lg text-sm flex items-center gap-2 shadow-md transition">
-              <i data-lucide="check" class="w-4 h-4"></i> Lưu Cài Đặt
-            </button>
-          </div>
+          <button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded-lg font-medium">Lưu Cài Đặt</button>
         </form>
       </div>
     </section>
-
   </main>
 
-  <!-- MODAL: Chỉnh sửa Thành viên -->
-  <div id="memberModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+  <!-- MODAL THÀNH VIÊN -->
+  <div id="memberModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
-      <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-        <i data-lucide="user-cog" class="w-5 h-5 text-emerald-600"></i> Chỉnh Sửa Thành Viên
-      </h3>
-      
-      <form id="memberForm" onsubmit="saveMember(event)" class="space-y-3">
+      <h3 class="text-lg font-bold">Chỉnh Sửa Thành Viên</h3>
+      <form onsubmit="saveMember(event)" class="space-y-3">
         <input type="hidden" id="memberIndex">
-        
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Ảnh Đại Diện (Avatar)</label>
-          <div class="flex items-center gap-3">
-            <img id="memberAvatarPreview" class="w-12 h-12 rounded-full object-cover border border-slate-200">
-            <input type="file" id="memberAvatarInput" accept="image/*" class="text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-emerald-50 file:text-emerald-700">
-          </div>
+          <label class="text-xs font-semibold">Tên</label>
+          <input type="text" id="memberNameInput" required class="w-full p-2 border rounded-lg text-sm">
         </div>
-
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Họ & Tên</label>
-          <input type="text" id="memberNameInput" required class="w-full p-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          <label class="text-xs font-semibold">Chức vụ</label>
+          <input type="text" id="memberRoleInput" required class="w-full p-2 border rounded-lg text-sm">
         </div>
-
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Chức Vụ / Vị Trí</label>
-          <input type="text" id="memberRoleInput" required class="w-full p-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          <label class="text-xs font-semibold">Link Ảnh Avatar</label>
+          <input type="text" id="memberAvatarInput" required class="w-full p-2 border rounded-lg text-sm">
         </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Mô Tả / Profile</label>
-          <textarea id="memberBioInput" rows="3" class="w-full p-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
-        </div>
-
         <div class="flex justify-end gap-2 pt-2">
-          <button type="button" onclick="closeMemberModal()" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Hủy</button>
-          <button type="submit" class="px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium">Lưu</button>
+          <button type="button" onclick="closeMemberModal()" class="px-4 py-2 text-sm text-slate-600">Hủy</button>
+          <button type="submit" class="px-4 py-2 text-sm bg-emerald-600 text-white rounded-lg">Lưu</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="bg-white border-t border-slate-200 py-6 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 space-y-1">
-      <p>© <span id="footerYear"></span> - Trang Web Nhóm Học Tập. Đã tối ưu cho GitHub Pages.</p>
-    </div>
-  </footer>
-
-  <!-- JAVASCRIPT LOGIC -->
   <script>
-    // --- 1. DỮ LIỆU MẶC ĐỊNH (DEFAULT DATA) ---
-    const DEFAULT_GROUP = {
-      name: "Nhóm Học Tập Sáng Tạo",
-      slogan: "Cùng nhau chinh phục tri thức!",
-      topic: "Sinh Học & Khoa Học Tự Nhiên",
-      description: "Trang web tổng hợp bài tập, nội dung ôn luyện và các bài thuyết trình của nhóm.",
-      logo: "" // Base64 or Empty
+    // CẤU HÌNH FIREBASE TỪ DỰ ÁN NHOMMOTPHA CỦA BẠN
+    const firebaseConfig = {
+      apiKey: "AIzaSyApv1jF0H31be-bR22pjf9W5YPj0eaWMk",
+      authDomain: "nhommotpha.firebaseapp.com",
+      databaseURL: "https://nhommotpha-default-rtdb.firebaseio.com",
+      projectId: "nhommotpha",
+      storageBucket: "nhommotpha.firebasestorage.app",
+      messagingSenderId: "857916353447",
+      appId: "1:857916353447:web:7ee13efdd1e5ceedb76482",
+      measurementId: "G-HKQYY82WCN"
     };
 
-    const DEFAULT_MEMBERS = [
-      { name: "Thành Viên 1", role: "Trưởng Nhóm", bio: "Phụ trách tổng quan và phân công công việc.", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" },
-      { name: "Thành Viên 2", role: "Thư Ký", bio: "Ghi chép và tổng hợp bài tập.", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" },
-      { name: "Thành Viên 3", role: "Thuyết Trình Viên", bio: "Đại diện nhóm trình bày các đề tài.", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" },
-      { name: "Thành Viên 4", role: "Nội Dung", bio: "Chuẩn bị phần luyện tập và vận dụng.", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" },
-      { name: "Thành Viên 5", role: "Kỹ Thuật", bio: "Quản lý slide và tài liệu đính kèm.", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150" }
-    ];
+    // Khởi tạo Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-    // Khởi tạo 28 bài tập ban đầu
-    const DEFAULT_ASSIGNMENTS = Array.from({ length: 28 }, (_, i) => ({
-      id: i + 1,
-      title: `Bài ${i + 1}`,
-      practice: `Nội dung phần Luyện Tập cho Bài ${i + 1}.`,
-      application: `Nội dung phần Vận Dụng cho Bài ${i + 1}.`
-    }));
+    // Dữ liệu ban đầu
+    const DEFAULT_DATA = {
+      group: { name: "Nhóm Một Phá", slogan: "Cùng nhau tiến bộ", topic: "Khoa học & Học tập", description: "Trang web lưu trữ bài tập và tài liệu chung của nhóm." },
+      members: Array.from({length: 5}, (_, i) => ({ name: `Thành Viên ${i+1}`, role: i===0?"Trưởng Nhóm":"Thành viên", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" })),
+      assignments: Array.from({ length: 28 }, (_, i) => ({ id: i + 1, title: `Bài ${i + 1}`, practice: "", application: "" })),
+      presentations: [{ id: 1, title: "Slide giới thiệu chung", date: "2026-10-24", link: "https://google.com" }]
+    };
 
-    const DEFAULT_PRESENTATIONS = [
-      { id: 1, title: "Chủ đề 1: Tổng quan Sinh học tế bào", date: "2026-10-01", link: "https://docs.google.com/presentation", note: "Slide thuyết trình tuần 1" },
-      { id: 2, title: "Chủ đề 2: Đột biến gen & Ứng dụng", date: "2026-10-15", link: "https://canva.com", note: "Bài thuyết trình nhóm đánh giá giữa kỳ" }
-    ];
+    let appData = DEFAULT_DATA;
+    let currentId = null;
 
-    // --- 2. QUẢN LÝ LOCALSTORAGE ---
-    let appGroup = JSON.parse(localStorage.getItem('web_group')) || DEFAULT_GROUP;
-    let appMembers = JSON.parse(localStorage.getItem('web_members')) || DEFAULT_MEMBERS;
-    let appAssignments = JSON.parse(localStorage.getItem('web_assignments')) || DEFAULT_ASSIGNMENTS;
-    let appPresentations = JSON.parse(localStorage.getItem('web_presentations')) || DEFAULT_PRESENTATIONS;
-    
-    let currentEditingAssignmentId = null;
+    // Lắng nghe dữ liệu thời gian thực từ Firebase
+    db.ref('webData').on('value', (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        appData = data;
+      } else {
+        db.ref('webData').set(DEFAULT_DATA);
+      }
+      renderAll();
+    });
 
     function saveData() {
-      localStorage.setItem('web_group', JSON.stringify(appGroup));
-      localStorage.setItem('web_members', JSON.stringify(appMembers));
-      localStorage.setItem('web_assignments', JSON.stringify(appAssignments));
-      localStorage.setItem('web_presentations', JSON.stringify(appPresentations));
-      renderAll();
+      db.ref('webData').set(appData);
     }
 
-    // --- 3. ĐIỀU HƯỚNG TAB ---
-    function switchTab(tabId) {
+    function switchTab(id) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('text-emerald-600', 'bg-emerald-50');
-        btn.classList.add('text-slate-600');
-      });
-
-      document.getElementById(`tab-${tabId}`).classList.add('active');
-      const activeNav = document.getElementById(`nav-${tabId}`);
-      if (activeNav) {
-        activeNav.classList.add('text-emerald-600', 'bg-emerald-50');
-        activeNav.classList.remove('text-slate-600');
-      }
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.className = "nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:bg-slate-100");
+      document.getElementById(`tab-${id}`).classList.add('active');
+      document.getElementById(`nav-${id}`).className = "nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-emerald-600 bg-emerald-50";
     }
 
-    // --- 4. RENDER GIAO DIỆN ---
     function renderAll() {
-      renderHeaderAndGroup();
-      renderMembers();
-      renderAssignments();
-      renderPresentations();
-      lucide.createIcons();
+      const g = appData.group || DEFAULT_DATA.group;
+      document.getElementById('brandNameDisplay').textContent = g.name;
+      document.getElementById('brandSloganDisplay').textContent = g.slogan;
+      document.getElementById('homeGroupName').textContent = g.name;
+      document.getElementById('homeGroupSlogan').textContent = `"${g.slogan}"`;
+      document.getElementById('homeTopic').textContent = g.topic;
+      document.getElementById('homeDescription').textContent = g.description;
+
+      document.getElementById('settingGroupName').value = g.name;
+      document.getElementById('settingSlogan').value = g.slogan;
+      document.getElementById('settingTopic').value = g.topic;
+      document.getElementById('settingDescription').value = g.description;
+
+      const members = appData.members || [];
+      document.getElementById('membersGrid').innerHTML = members.map((m, i) => `
+        <div class="bg-white rounded-xl border p-4 shadow-sm flex flex-col items-center text-center space-y-2">
+          <img src="${m.avatar}" class="w-16 h-16 rounded-full object-cover">
+          <h4 class="font-bold text-sm">${m.name}</h4>
+          <span class="bg-emerald-50 text-emerald-700 text-xs px-2 py-0.5 rounded-full">${m.role}</span>
+          <button onclick="openMemberModal(${i})" class="w-full text-xs bg-slate-100 hover:bg-emerald-600 hover:text-white py-1.5 rounded-lg mt-auto">Sửa Profile</button>
+        </div>`).join('');
+
+      const assignments = appData.assignments || [];
+      document.getElementById('assignmentsGrid').innerHTML = assignments.map(a => `
+        <div class="bg-white rounded-xl border p-4 shadow-sm flex flex-col justify-between space-y-3">
+          <div class="flex justify-between items-start"><h3 class="font-bold">${a.title}</h3></div>
+          <button onclick="openDetail(${a.id})" class="w-full bg-slate-50 hover:bg-emerald-600 hover:text-white text-slate-700 text-xs py-2 rounded-lg">Xem chi tiết</button>
+        </div>`).join('');
+
+      const presentations = appData.presentations || [];
+      document.getElementById('presentationsList').innerHTML = presentations.map(p => `
+        <div class="bg-white rounded-xl border p-4 shadow-sm flex justify-between items-center">
+          <div><h4 class="font-bold">${p.title}</h4><p class="text-xs text-slate-500">${p.date}</p></div>
+          <a href="${p.link}" target="_blank" class="text-emerald-600 text-xs font-medium underline">Mở Link</a>
+        </div>`).join('');
     }
 
-    function renderHeaderAndGroup() {
-      document.getElementById('brandNameDisplay').textContent = appGroup.name;
-      document.getElementById('brandSloganDisplay').textContent = appGroup.slogan;
-
-      document.getElementById('homeGroupName').textContent = appGroup.name;
-      document.getElementById('homeGroupSlogan').textContent = `"${appGroup.slogan}"`;
-      document.getElementById('homeTopic').textContent = appGroup.topic;
-      document.getElementById('homeDescription').textContent = appGroup.description;
-
-      // Render Logo
-      const logoContainers = [document.getElementById('brandLogoContainer'), document.getElementById('settingsLogoPreview')];
-      logoContainers.forEach(container => {
-        if (!container) return;
-        if (appGroup.logo) {
-          container.innerHTML = `<img src="${appGroup.logo}" class="w-full h-full object-cover rounded-xl">`;
-        } else {
-          container.innerHTML = appGroup.name.charAt(0).toUpperCase();
-        }
-      });
-
-      // Fill settings form
-      document.getElementById('settingGroupName').value = appGroup.name;
-      document.getElementById('settingSlogan').value = appGroup.slogan;
-      document.getElementById('settingTopic').value = appGroup.topic;
-      document.getElementById('settingDescription').value = appGroup.description;
-      document.getElementById('footerYear').textContent = new Date().getFullYear();
-    }
-
-    function renderMembers() {
-      const grid = document.getElementById('membersGrid');
-      grid.innerHTML = appMembers.map((m, index) => `
-        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col items-center text-center space-y-3 relative group hover:border-emerald-300 transition">
-          <img src="${m.avatar}" class="w-20 h-20 rounded-full object-cover border-2 border-emerald-500/20 shadow-sm">
-          <div class="space-y-1">
-            <h4 class="font-bold text-slate-900 text-sm">${m.name}</h4>
-            <span class="inline-block bg-emerald-50 text-emerald-700 text-xs px-2 py-0.5 rounded-full font-medium border border-emerald-200">${m.role}</span>
-            <p class="text-xs text-slate-500 line-clamp-2 pt-1">${m.bio || 'Chưa có mô tả.'}</p>
-          </div>
-          <button onclick="openMemberModal(${index})" class="mt-auto text-xs bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-600 font-medium px-3 py-1.5 rounded-lg transition flex items-center gap-1 w-full justify-center">
-            <i data-lucide="edit-3" class="w-3 h-3"></i> Chỉnh sửa
-          </button>
-        </div>
-      `).join('');
-    }
-
-    function renderAssignments() {
-      const grid = document.getElementById('assignmentsGrid');
-      grid.innerHTML = appAssignments.map(a => `
-        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm hover:shadow-md hover:border-emerald-400 transition flex flex-col justify-between space-y-3 group">
-          <div class="flex items-start justify-between gap-2">
-            <h3 class="font-bold text-slate-800 group-hover:text-emerald-600 transition text-base">${a.title}</h3>
-            <button onclick="deleteAssignment(${a.id})" title="Xóa bài" class="text-slate-300 hover:text-red-500 p-1 rounded transition">
-              <i data-lucide="trash-2" class="w-4 h-4"></i>
-            </button>
-          </div>
-          <p class="text-xs text-slate-400 line-clamp-1">Gồm phần Luyện tập & Vận dụng</p>
-          <button onclick="openAssignmentDetail(${a.id})" class="w-full bg-slate-50 group-hover:bg-emerald-600 group-hover:text-white text-slate-700 font-medium text-xs py-2 rounded-lg transition flex items-center justify-center gap-1">
-            Xem chi tiết <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-          </button>
-        </div>
-      `).join('');
-    }
-
-    function renderPresentations() {
-      const list = document.getElementById('presentationsList');
-      if (appPresentations.length === 0) {
-        list.innerHTML = `<div class="p-8 text-center text-slate-400 bg-white rounded-xl border border-slate-200">Chưa có bài thuyết trình nào.</div>`;
-        return;
-      }
-      list.innerHTML = appPresentations.map((p, index) => `
-        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div class="space-y-1">
-            <h4 class="font-bold text-slate-900">${p.title}</h4>
-            <div class="flex items-center gap-3 text-xs text-slate-500">
-              <span><i data-lucide="calendar" class="w-3.5 h-3.5 inline"></i> ${p.date}</span>
-              <span>${p.note || ''}</span>
-            </div>
-          </div>
-          <div class="flex items-center gap-2">
-            <a href="${p.link}" target="_blank" class="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-medium px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 transition">
-              <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Mở Link Slide
-            </a>
-            <button onclick="deletePresentation(${index})" class="text-slate-400 hover:text-red-500 p-1.5 rounded">
-              <i data-lucide="trash-2" class="w-4 h-4"></i>
-            </button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // --- 5. TÍNH NĂNG BÀI TẬP CHI TIẾT ---
-    function openAssignmentDetail(id) {
-      currentEditingAssignmentId = id;
-      const item = appAssignments.find(a => a.id === id);
-      if (!item) return;
-
+    function openDetail(id) {
+      currentId = id;
+      let item = (appData.assignments || []).find(x => x.id === id);
+      if(!item) return;
       document.getElementById('detailTitleInput').value = item.title;
       document.getElementById('detailPracticeInput').value = item.practice || "";
       document.getElementById('detailApplicationInput').value = item.application || "";
-
       document.getElementById('assignmentListView').classList.add('hidden');
       document.getElementById('assignmentDetailView').classList.remove('hidden');
     }
@@ -470,137 +253,75 @@
     function closeAssignmentDetail() {
       document.getElementById('assignmentDetailView').classList.add('hidden');
       document.getElementById('assignmentListView').classList.remove('hidden');
-      currentEditingAssignmentId = null;
     }
 
     function saveCurrentAssignmentDetail() {
-      if (!currentEditingAssignmentId) return;
-      const item = appAssignments.find(a => a.id === currentEditingAssignmentId);
-      if (item) {
-        item.title = document.getElementById('detailTitleInput').value.trim() || item.title;
+      let item = (appData.assignments || []).find(x => x.id === currentId);
+      if(item) {
+        item.title = document.getElementById('detailTitleInput').value;
         item.practice = document.getElementById('detailPracticeInput').value;
         item.application = document.getElementById('detailApplicationInput').value;
         saveData();
-        alert('Đã lưu nội dung bài tập thành công!');
+        alert('Đã đồng bộ lên hệ thống cho cả nhóm!');
         closeAssignmentDetail();
       }
     }
 
     function addNewAssignment() {
-      const nextNum = appAssignments.length + 1;
-      const newTitle = prompt("Nhập tên bài tập mới:", `Bài ${nextNum}`);
-      if (newTitle) {
-        appAssignments.push({
-          id: Date.now(),
-          title: newTitle,
-          practice: "",
-          application: ""
-        });
+      let title = prompt("Nhập tên bài tập:", `Bài ${(appData.assignments || []).length + 1}`);
+      if(title) {
+        if(!appData.assignments) appData.assignments = [];
+        appData.assignments.push({ id: Date.now(), title, practice: "", application: "" });
         saveData();
       }
     }
 
-    function deleteAssignment(id) {
-      if (confirm("Bạn có chắc chắn muốn xóa bài tập này?")) {
-        appAssignments = appAssignments.filter(a => a.id !== id);
-        saveData();
-      }
-    }
-
-    // --- 6. TÍNH NĂNG THÀNH VIÊN ---
-    let currentAvatarBase64 = "";
-
-    function openMemberModal(index) {
-      const m = appMembers[index];
-      document.getElementById('memberIndex').value = index;
+    function openMemberModal(i) {
+      let m = appData.members[i];
+      document.getElementById('memberIndex').value = i;
       document.getElementById('memberNameInput').value = m.name;
       document.getElementById('memberRoleInput').value = m.role;
-      document.getElementById('memberBioInput').value = m.bio || "";
-      document.getElementById('memberAvatarPreview').src = m.avatar;
-      currentAvatarBase64 = m.avatar;
-
+      document.getElementById('memberAvatarInput').value = m.avatar;
       document.getElementById('memberModal').classList.remove('hidden');
     }
 
-    function closeMemberModal() {
-      document.getElementById('memberModal').classList.add('hidden');
+    function closeMemberModal() { 
+      document.getElementById('memberModal').classList.add('hidden'); 
     }
-
-    document.getElementById('memberAvatarInput').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          currentAvatarBase64 = evt.target.result;
-          document.getElementById('memberAvatarPreview').src = currentAvatarBase64;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
+    
     function saveMember(e) {
       e.preventDefault();
-      const idx = document.getElementById('memberIndex').value;
-      appMembers[idx] = {
+      let i = document.getElementById('memberIndex').value;
+      appData.members[i] = {
         name: document.getElementById('memberNameInput').value,
         role: document.getElementById('memberRoleInput').value,
-        bio: document.getElementById('memberBioInput').value,
-        avatar: currentAvatarBase64
+        avatar: document.getElementById('memberAvatarInput').value
       };
       saveData();
       closeMemberModal();
     }
 
-    // --- 7. TÍNH NĂNG CÀI ĐẶT & THUYẾT TRÌNH ---
     function saveSettings(e) {
       e.preventDefault();
-      appGroup.name = document.getElementById('settingGroupName').value;
-      appGroup.slogan = document.getElementById('settingSlogan').value;
-      appGroup.topic = document.getElementById('settingTopic').value;
-      appGroup.description = document.getElementById('settingDescription').value;
-
-      const logoFile = document.getElementById('logoFileInput').files[0];
-      if (logoFile) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          appGroup.logo = evt.target.result;
-          saveData();
-          alert("Đã lưu cài đặt nhóm!");
-        };
-        reader.readAsDataURL(logoFile);
-      } else {
-        saveData();
-        alert("Đã lưu cài đặt nhóm!");
-      }
+      appData.group = {
+        name: document.getElementById('settingGroupName').value,
+        slogan: document.getElementById('settingSlogan').value,
+        topic: document.getElementById('settingTopic').value,
+        description: document.getElementById('settingDescription').value
+      };
+      saveData();
+      alert('Đã cập nhật thông tin nhóm cho cả hệ thống!');
     }
 
     function addNewPresentation() {
-      const title = prompt("Nhập tiêu đề bài thuyết trình:");
-      if (!title) return;
-      const link = prompt("Nhập đường link slide/video (Google Slides, Canva...):", "https://");
-      if (!link) return;
-
-      appPresentations.push({
-        id: Date.now(),
-        title: title,
-        date: new Date().toISOString().split('T')[0],
-        link: link,
-        note: "Bài thuyết trình mới"
-      });
-      saveData();
-    }
-
-    function deletePresentation(index) {
-      if (confirm("Xóa bài thuyết trình này?")) {
-        appPresentations.splice(index, 1);
+      let title = prompt("Nhập tên bài thuyết trình:");
+      let link = prompt("Nhập link slide:", "https://");
+      if(title && link) {
+        if(!appData.presentations) appData.presentations = [];
+        appData.presentations.push({ id: Date.now(), title, date: new Date().toLocaleDateString(), link });
         saveData();
       }
     }
-
-    // Initialize
-    window.onload = function() {
-      renderAll();
-    };
   </script>
 </body>
 </html>
