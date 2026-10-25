@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NHÓM MỘT PHÁ</title>
+  <title>Trang Web Học Tập & Nhóm - Đồng Bộ Firebase</title>
   
   <!-- Tailwind CSS & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -371,14 +371,14 @@
   <!-- SCRIPT KẾT NỐI & VẬN HÀNH -->
   <script>
     // -------------------------------------------------------------
-    // DANH SÁCH EMAIL ĐƯỢC QUYỀN CHỈNH SỬA WEBSITE (ADMINS)
+    // DANH SÁCH EMAIL ADMIN ĐƯỢC PHÉP CHỈNH SỬA WEBSITE
     // -------------------------------------------------------------
     const ADMIN_EMAILS = [
-      "duongtranbichngan@gmail.com", // Email của bạn (Bích Ngân)
-      "baohan030409@gmail.com@gmail.com",
-      "nguyenthanhdat2112009@gmail.com@gmail.com"
-      "phucan665@gmail.com"
-      "concabietdi12345@gmail.com@gmail.com@gmail.com"
+      "duongtranbichngan@gmail.com",
+      "baohan030409@gmail.com",
+      "nguyenthanhdat2112009@gmail.com",
+      "phucan665@gmail.com",
+      "concabietdi12345@gmail.com"
     ];
 
     // Hàm kiểm tra quyền Admin
@@ -664,7 +664,6 @@
       currentEditingAssignmentId = null;
     }
 
-    // [THÊM PHÂN QUYỀN]: Kiểm tra Email Admin trước khi lưu Bài Tập
     function saveCurrentAssignmentDetail() {
       if (!checkAdminPermission()) return;
       if (!currentEditingAssignmentId) return;
@@ -680,7 +679,6 @@
       }
     }
 
-    // [THÊM PHÂN QUYỀN]: Kiểm tra Email Admin trước khi thêm Bài Tập Mới
     function addNewAssignment() {
       if (!checkAdminPermission()) return;
 
@@ -698,7 +696,6 @@
       }
     }
 
-    // [THÊM PHÂN QUYỀN]: Kiểm tra Email Admin trước khi xóa Bài Tập
     function deleteAssignment(id) {
       if (!checkAdminPermission()) return;
 
@@ -736,7 +733,6 @@
       }
     });
 
-    // [THÊM PHÂN QUYỀN]: Kiểm tra Email Admin trước khi sửa Thành viên
     function saveMember(e) {
       e.preventDefault();
       if (!checkAdminPermission()) return;
@@ -765,7 +761,6 @@
       }
     });
 
-    // [THÊM PHÂN QUYỀN]: Kiểm tra Email Admin trước khi Lưu Cài Đặt
     function saveSettings(e) {
       e.preventDefault();
       if (!checkAdminPermission()) return;
@@ -782,7 +777,6 @@
       alert("Đã lưu cài đặt và đồng bộ thành công cho cả nhóm!");
     }
 
-    // [THÊM PHÂN QUYỀN]: Kiểm tra Email Admin trước khi Thêm Thuyết Trình
     function addNewPresentation() {
       if (!checkAdminPermission()) return;
 
@@ -802,7 +796,6 @@
       saveDataToFirebase();
     }
 
-    // [THÊM PHÂN QUYỀN]: Kiểm tra Email Admin trước khi Xóa Thuyết Trình
     function deletePresentation(index) {
       if (!checkAdminPermission()) return;
 
