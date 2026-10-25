@@ -129,7 +129,7 @@
         </div>
       </div>
 
-      <!-- WIDGET POMODORO PIXEL THỎ & PIKACHU MOCHI (NẰM DƯỚI PHẦN THÀNH VIÊN NHÓM) -->
+      <!-- WIDGET POMODORO PIXEL THỎ & PIKACHU MOCHI -->
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-slate-100 pb-3">
           <h3 class="text-xl font-bold text-rose-700 pixel-font tracking-wide flex items-center gap-2">
@@ -141,10 +141,7 @@
           </div>
         </div>
 
-        <!-- Khung 3 Cột Ngang -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          
-          <!-- Cột 1: Canvas Thỏ & Pikachu (5 Cột) -->
           <div class="lg:col-span-5 bg-pink-50/80 p-4 pixel-box flex flex-col justify-between relative">
             <div class="flex justify-between text-xs mb-2 font-bold pixel-font">
               <span id="statusText" class="text-pink-700">Thỏ đang cuộn tròn ngủ... 💤</span>
@@ -158,14 +155,12 @@
             <p class="text-[11px] text-slate-500 mt-2 text-center">💡 2 phút học = 1 Mochi. Dừng đủ 3 lần Pikachu sẽ ghé thăm lấy trộm bánh ngẫu nhiên!</p>
           </div>
 
-          <!-- Cột 2: Bộ Điều Khiển & Chọn Thời Gian (4 Cột) -->
           <div class="lg:col-span-4 bg-slate-50 p-4 pixel-box flex flex-col justify-between space-y-3">
             <div class="text-center bg-slate-900 text-emerald-400 p-3 pixel-box">
               <div id="modeDisplay" class="text-xs text-slate-400 uppercase tracking-widest mb-1 pixel-font">Chế độ: Tập trung</div>
               <div id="timerDisplay" class="text-5xl font-bold tracking-widest pixel-font">25:00</div>
             </div>
 
-            <!-- Thanh chọn thời gian đơn giản -->
             <div class="space-y-1 pixel-font">
               <label class="text-xs font-bold text-slate-600 uppercase">Chọn nhanh:</label>
               <div class="grid grid-cols-4 gap-1.5">
@@ -176,7 +171,6 @@
               </div>
             </div>
 
-            <!-- Ô chỉnh phút tùy chọn -->
             <div class="flex items-center gap-2 pixel-font text-xs">
               <label class="font-bold text-slate-600 uppercase">Tự chỉnh:</label>
               <input type="number" id="customMinutesInput" value="25" min="1" max="120" class="w-16 p-1 text-center border-2 border-slate-800 text-base font-bold">
@@ -184,7 +178,6 @@
               <button onclick="applyCustomTime()" class="bg-amber-200 hover:bg-amber-300 px-3 py-1 font-bold pixel-btn ml-auto">Áp dụng</button>
             </div>
 
-            <!-- Nút điều khiển -->
             <div class="flex gap-2 pt-1 pixel-font">
               <button onclick="startTimer()" class="flex-1 bg-emerald-400 hover:bg-emerald-500 text-slate-900 font-bold py-2 text-lg pixel-btn">BẮT ĐẦU</button>
               <button onclick="pauseTimer()" class="flex-1 bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold py-2 text-lg pixel-btn">TẠM DỪNG</button>
@@ -192,7 +185,6 @@
             </div>
           </div>
 
-          <!-- Cột 3: Bảng Xếp Hạng Mochi Nhóm (3 Cột) -->
           <div class="lg:col-span-3 bg-amber-100/60 p-4 pixel-box flex flex-col justify-between">
             <div>
               <h4 class="text-xl font-bold text-slate-900 border-b-2 border-slate-800 pb-2 mb-3 pixel-font flex justify-between">
@@ -205,15 +197,12 @@
             </div>
             <p class="text-[10px] text-slate-500 text-center italic mt-2">Đăng nhập Google ở góc trang để lưu Mochi lên BXH!</p>
           </div>
-
         </div>
       </div>
     </section>
 
     <!-- TAB 2: BÀI TẬP -->
     <section id="tab-assignments" class="tab-content space-y-6">
-      
-      <!-- List View -->
       <div id="assignmentListView" class="space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
           <div>
@@ -225,12 +214,9 @@
           </button>
         </div>
 
-        <div id="assignmentsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <!-- Rendered via JS -->
-        </div>
+        <div id="assignmentsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
       </div>
 
-      <!-- Detail View -->
       <div id="assignmentDetailView" class="hidden space-y-6">
         <div class="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
           <button onclick="closeAssignmentDetail()" class="text-slate-600 hover:text-emerald-600 font-medium text-sm flex items-center gap-2 transition">
@@ -248,7 +234,6 @@
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Phần 1: Luyện tập -->
             <div class="bg-emerald-50/50 border border-emerald-100 p-5 rounded-xl space-y-3">
               <div class="flex items-center gap-2 text-emerald-800 font-bold text-lg border-b border-emerald-200/60 pb-2">
                 <i data-lucide="pen-tool" class="w-5 h-5 text-emerald-600"></i> Phần 1: Luyện Tập
@@ -257,7 +242,6 @@
               <textarea id="detailPracticeInput" rows="10" placeholder="Nhập nội dung Luyện tập..." class="w-full p-3 text-sm bg-white border border-emerald-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-y"></textarea>
             </div>
 
-            <!-- Phần 2: Vận dụng -->
             <div class="bg-blue-50/50 border border-blue-100 p-5 rounded-xl space-y-3">
               <div class="flex items-center gap-2 text-blue-800 font-bold text-lg border-b border-blue-200/60 pb-2">
                 <i data-lucide="rocket" class="w-5 h-5 text-blue-600"></i> Phần 2: Vận Dụng
@@ -268,7 +252,6 @@
           </div>
         </div>
       </div>
-
     </section>
 
     <!-- TAB 3: BÀI THUYẾT TRÌNH -->
@@ -283,9 +266,7 @@
         </button>
       </div>
 
-      <div id="presentationsList" class="space-y-4">
-        <!-- Rendered via JS -->
-      </div>
+      <div id="presentationsList" class="space-y-4"></div>
     </section>
 
     <!-- TAB 4: CÀI ĐẶT NHÓM -->
@@ -349,7 +330,6 @@
       
       <form onsubmit="saveMember(event)" class="space-y-3">
         <input type="hidden" id="memberIndex">
-        
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1">Ảnh Đại Diện (Avatar)</label>
           <div class="flex items-center gap-3">
@@ -390,9 +370,32 @@
 
   <!-- SCRIPT KẾT NỐI & VẬN HÀNH -->
   <script>
+    // -------------------------------------------------------------
+    // DANH SÁCH EMAIL ĐƯỢC QUYỀN CHỈNH SỬA WEBSITE (ADMINS)
+    // -------------------------------------------------------------
+    const ADMIN_EMAILS = [
+      "duongtranbichngan@gmail.com", // Email của bạn (Bích Ngân)
+      "baohan030409@gmail.com@gmail.com",
+      "nguyenthanhdat2112009@gmail.com@gmail.com"
+      "concabietdi12345@gmail.com@gmail.com@gmail.com"
+    ];
+
+    // Hàm kiểm tra quyền Admin
+    function checkAdminPermission() {
+      if (!currentUser) {
+        alert("⛔ Bạn cần bấm 'Đăng nhập Google' ở góc trên trang web để thực hiện thao tác này!");
+        return false;
+      }
+      if (!ADMIN_EMAILS.includes(currentUser.email)) {
+        alert(`⛔ Email '${currentUser.email}' không nằm trong danh sách Admin được phép chỉnh sửa!`);
+        return false;
+      }
+      return true;
+    }
+
     // CẤU HÌNH FIREBASE DỰ ÁN NHÓM
     const firebaseConfig = {
-      apiKey: "AIzaSyApv1jF0H31be-bR22pjf9W5YPj08eaWMk",
+      apiKey: "AIzaSyApv1jF0H31be-bR22pjf9W5YPj0eaWMk",
       authDomain: "nhommotpha.firebaseapp.com",
       databaseURL: "https://nhommotpha-default-rtdb.firebaseio.com",
       projectId: "nhommotpha",
@@ -408,7 +411,6 @@
 
     let currentUser = null;
 
-    // ĐĂNG NHẬP GOOGLE TOÀN TRANG
     function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       auth.signInWithPopup(provider).catch(err => alert("Lỗi đăng nhập: " + err.message));
@@ -418,7 +420,6 @@
       auth.signOut().then(() => alert("Đã đăng xuất!"));
     }
 
-    // Lắng nghe trạng thái đăng nhập hệ thống
     auth.onAuthStateChanged(user => {
       currentUser = user;
       const authContainer = document.getElementById('globalAuthContainer');
@@ -434,7 +435,6 @@
         `;
         lucide.createIcons();
 
-        // Lấy số bánh Mochi của tài khoản đã lưu
         db.ref(`leaderboard/${user.uid}`).once('value', snap => {
           if (snap.exists()) {
             totalMochi = snap.val().mochi || 0;
@@ -451,7 +451,6 @@
       }
     });
 
-    // Lắng nghe Bảng xếp hạng Realtime
     db.ref('leaderboard').on('value', snap => {
       const data = snap.val() || {};
       const listEl = document.getElementById('leaderboardList');
@@ -486,7 +485,6 @@
       }
     }
 
-    // DỮ LIỆU CŨ TRANG WEB
     const DEFAULT_DATA = {
       group: {
         name: "Nhóm Một Phá",
@@ -665,8 +663,11 @@
       currentEditingAssignmentId = null;
     }
 
+    // [THÊM PHÂN QUYỀN]: Kiểm tra Email Admin trước khi lưu Bài Tập
     function saveCurrentAssignmentDetail() {
+      if (!checkAdminPermission()) return;
       if (!currentEditingAssignmentId) return;
+
       const item = (appData.assignments || []).find(a => a.id === currentEditingAssignmentId);
       if (item) {
         item.title = document.getElementById('detailTitleInput').value.trim() || item.title;
@@ -678,7 +679,10 @@
       }
     }
 
+    // [THÊM PHÂN QUYỀN]: Kiểm tra Email Admin trước khi thêm Bài Tập Mới
     function addNewAssignment() {
+      if (!checkAdminPermission()) return;
+
       const nextNum = (appData.assignments || []).length + 1;
       const newTitle = prompt("Nhập tên bài tập mới:", `Bài ${nextNum}`);
       if (newTitle) {
@@ -693,7 +697,10 @@
       }
     }
 
+    // [THÊM PHÂN QUYỀN]: Kiểm tra Email Admin trước khi xóa Bài Tập
     function deleteAssignment(id) {
+      if (!checkAdminPermission()) return;
+
       if (confirm("Bạn có chắc chắn muốn xóa bài tập này?")) {
         appData.assignments = appData.assignments.filter(a => a.id !== id);
         saveDataToFirebase();
@@ -728,8 +735,11 @@
       }
     });
 
+    // [THÊM PHÂN QUYỀN]: Kiểm tra Email Admin trước khi sửa Thành viên
     function saveMember(e) {
       e.preventDefault();
+      if (!checkAdminPermission()) return;
+
       const idx = document.getElementById('memberIndex').value;
       if (!appData.members) appData.members = [];
       appData.members[idx] = {
@@ -754,8 +764,11 @@
       }
     });
 
+    // [THÊM PHÂN QUYỀN]: Kiểm tra Email Admin trước khi Lưu Cài Đặt
     function saveSettings(e) {
       e.preventDefault();
+      if (!checkAdminPermission()) return;
+
       if (!appData.group) appData.group = {};
       appData.group.name = document.getElementById('settingGroupName').value;
       appData.group.slogan = document.getElementById('settingSlogan').value;
@@ -768,7 +781,10 @@
       alert("Đã lưu cài đặt và đồng bộ thành công cho cả nhóm!");
     }
 
+    // [THÊM PHÂN QUYỀN]: Kiểm tra Email Admin trước khi Thêm Thuyết Trình
     function addNewPresentation() {
+      if (!checkAdminPermission()) return;
+
       const title = prompt("Nhập tiêu đề bài thuyết trình:");
       if (!title) return;
       const link = prompt("Nhập đường link slide/video (Google Slides, Canva...):", "https://");
@@ -785,7 +801,10 @@
       saveDataToFirebase();
     }
 
+    // [THÊM PHÂN QUYỀN]: Kiểm tra Email Admin trước khi Xóa Thuyết Trình
     function deletePresentation(index) {
+      if (!checkAdminPermission()) return;
+
       if (confirm("Xóa bài thuyết trình này?")) {
         appData.presentations.splice(index, 1);
         saveDataToFirebase();
