@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NHÓM MỘT PHÁ</title>
+  <title>Trang Web Học Tập & Nhóm - Đồng Bộ Firebase</title>
   
+  <!-- Tailwind CSS & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   
-  <!-- Firebase SDKs -->
+  <!-- Firebase SDK (Compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
@@ -33,191 +34,363 @@
     }
     canvas { image-rendering: pixelated; }
     .tab-content { display: none; }
-    .tab-content.active { display: block; }
+    .tab-content.active { display: block; animation: fadeIn 0.2s ease-in-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-  <!-- HEADER -->
+  <!-- HEADER / NAVIGATION -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
+      <div class="flex items-center justify-between h-16 gap-2">
+        
+        <!-- Logo & Brand Name -->
         <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
-          <div id="brandLogoContainer" class="w-10 h-10 rounded-xl overflow-hidden bg-emerald-500 text-white flex items-center justify-center font-bold text-xl shadow-md">N</div>
-          <div>
+          <div id="brandLogoContainer" class="w-10 h-10 rounded-xl overflow-hidden bg-emerald-500 text-white flex items-center justify-center font-bold text-xl shadow-md border border-emerald-400">
+            N
+          </div>
+          <div class="hidden sm:block">
             <h1 id="brandNameDisplay" class="font-bold text-lg text-slate-900 leading-tight">Nhóm Một Phá</h1>
-            <p id="brandSloganDisplay" class="text-xs text-slate-500">Đồng bộ tự động Realtime</p>
+            <p id="brandSloganDisplay" class="text-xs text-slate-500">Đồng bộ nhóm thời gian thực</p>
           </div>
         </div>
+
+        <!-- Navigation Tabs -->
         <nav class="flex items-center gap-1 sm:gap-2">
-          <button onclick="switchTab('home')" id="nav-home" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-emerald-600 bg-emerald-50">Trang Chủ</button>
-          <button onclick="switchTab('assignments')" id="nav-assignments" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:bg-slate-100">Bài Tập</button>
-          <button onclick="switchTab('presentations')" id="nav-presentations" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:bg-slate-100">Thuyết Trình</button>
-          <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:bg-slate-100">Cài Đặt</button>
+          <button onclick="switchTab('home')" id="nav-home" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-emerald-600 bg-emerald-50">
+            <i data-lucide="home" class="w-4 h-4"></i>
+            <span class="hidden md:inline">Trang Chủ</span>
+          </button>
+          
+          <button onclick="switchTab('assignments')" id="nav-assignments" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:bg-slate-100">
+            <i data-lucide="book-open" class="w-4 h-4"></i>
+            <span class="hidden md:inline">Bài Tập</span>
+          </button>
+
+          <button onclick="switchTab('presentations')" id="nav-presentations" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:bg-slate-100">
+            <i data-lucide="presentation" class="w-4 h-4"></i>
+            <span class="hidden md:inline">Thuyết Trình</span>
+          </button>
+
+          <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:bg-slate-100">
+            <i data-lucide="settings" class="w-4 h-4"></i>
+            <span class="hidden md:inline">Cài Đặt</span>
+          </button>
         </nav>
+
+        <!-- ĐĂNG NHẬP GOOGLE TOÀN TRANG WEB (HEADER) -->
+        <div id="globalAuthContainer" class="flex items-center gap-2">
+          <button onclick="loginWithGoogle()" class="bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 font-medium px-3 py-1.5 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow-sm transition">
+            <img src="https://www.google.com/favicon.ico" class="w-4 h-4">
+            <span>Đăng nhập Google</span>
+          </button>
+        </div>
+
       </div>
     </div>
   </header>
 
+  <!-- MAIN CONTENT CONTAINER -->
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    
-    <!-- TRANG CHỦ -->
+
+    <!-- TAB 1: TRANG CHỦ -->
     <section id="tab-home" class="tab-content active space-y-8">
-      <div class="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-2xl p-6 sm:p-8 text-white shadow-lg space-y-3">
-        <span class="bg-white/20 text-xs px-3 py-1 rounded-full font-medium">Thông Tin Hoạt Động</span>
-        <h2 id="homeGroupName" class="text-2xl sm:text-4xl font-extrabold">Nhóm Một Phá</h2>
-        <p id="homeGroupSlogan" class="text-emerald-100 italic">"Cùng nhau chinh phục tri thức!"</p>
-        <div><strong>Đề tài:</strong> <span id="homeTopic">Khoa học & Học tập</span></div>
-        <p id="homeDescription" class="text-sm text-emerald-50">Trang web lưu trữ bài tập và tài liệu chung của nhóm.</p>
+      <!-- Banner Giới thiệu nhóm -->
+      <div class="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-2xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
+        <div class="relative z-10 max-w-3xl space-y-3">
+          <span class="bg-white/20 text-xs px-3 py-1 rounded-full font-medium backdrop-blur-sm inline-block">Thông Tin Hoạt Động</span>
+          <h2 id="homeGroupName" class="text-2xl sm:text-4xl font-extrabold tracking-tight">Nhóm Một Phá</h2>
+          <p id="homeGroupSlogan" class="text-emerald-100 italic text-sm sm:text-base">"Cùng nhau chinh phục tri thức!"</p>
+          
+          <div class="pt-2 border-t border-white/20 flex flex-wrap gap-4 text-xs sm:text-sm text-emerald-100">
+            <div><strong class="text-white">Đề tài / Lĩnh vực:</strong> <span id="homeTopic">Khoa học & Học tập</span></div>
+          </div>
+          <p id="homeDescription" class="text-sm text-emerald-50/90 leading-relaxed pt-1">
+            Trang web lưu trữ bài tập, nội dung ôn luyện và tài liệu chung của nhóm.
+          </p>
+        </div>
       </div>
 
-      <!-- WIDGET POMODORO PIXEL: MUỐN ĂN THÌ PHẢI CÓ LÀM -->
+      <!-- Giới thiệu 5 thành viên -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="users" class="w-5 h-5 text-emerald-600"></i> Thành Viên Nhóm
+          </h3>
+          <span class="text-xs text-slate-500">(Bấm "Chỉnh sửa" để đổi tên, chức vụ hoặc avatar)</span>
+        </div>
+
+        <div id="membersGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- WIDGET POMODORO PIXEL THỎ & PIKACHU MOCHI (NẰM DƯỚI PHẦN THÀNH VIÊN NHÓM) -->
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 border-b pb-3">
-          <h3 class="text-xl font-bold text-rose-700 pixel-font tracking-wide">🐇 MUỐN ĂN THÌ PHẢI CÓ LÀM</h3>
-          <div class="flex items-center gap-3">
-            <div id="userInfo">
-              <button onclick="loginWithGoogle()" class="bg-white hover:bg-slate-100 text-slate-800 text-xs font-bold px-3 py-1.5 pixel-btn flex items-center gap-1.5 pixel-font">
-                <img src="https://www.google.com/favicon.ico" class="w-3.5 h-3.5"> Đăng nhập Google
-              </button>
-            </div>
-            <div class="flex items-center gap-2 bg-amber-100 px-3 py-1 pixel-box text-lg font-bold text-amber-900 pixel-font">
-              <span>🍡 Mochi cá nhân:</span> <span id="totalMochiDisplay">0</span>
-            </div>
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <h3 class="text-xl font-bold text-rose-700 pixel-font tracking-wide flex items-center gap-2">
+            🐇 MUỐN ĂN THÌ PHẢI CÓ LÀM
+          </h3>
+          <div class="flex items-center gap-2 bg-amber-100 px-4 py-1.5 pixel-box text-xl font-bold text-amber-900 pixel-font">
+            <span>🍡 Kho Mochi cá nhân:</span>
+            <span id="totalMochiDisplay">0</span>
           </div>
         </div>
 
+        <!-- Khung 3 Cột Ngang -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          <!-- Cột Thỏ & Pikachu -->
+          
+          <!-- Cột 1: Canvas Thỏ & Pikachu (5 Cột) -->
           <div class="lg:col-span-5 bg-pink-50/80 p-4 pixel-box flex flex-col justify-between relative">
             <div class="flex justify-between text-xs mb-2 font-bold pixel-font">
               <span id="statusText" class="text-pink-700">Thỏ đang cuộn tròn ngủ... 💤</span>
               <span class="text-rose-600">Lần dừng: <strong id="pauseCountDisplay">0</strong>/3</span>
             </div>
-            <div class="bg-amber-50 w-full h-48 pixel-box flex items-center justify-center relative overflow-hidden">
+            
+            <div class="bg-amber-50 w-full h-52 pixel-box flex items-center justify-center relative overflow-hidden">
               <canvas id="mochiCanvas" width="320" height="150" class="w-full h-full"></canvas>
             </div>
-            <p class="text-[11px] text-slate-500 mt-2 text-center">💡 2 phút học = 1 Mochi. Dừng đủ 3 lần Pikachu sẽ ghé lấy bánh ngẫu nhiên!</p>
+            
+            <p class="text-[11px] text-slate-500 mt-2 text-center">💡 2 phút học = 1 Mochi. Dừng đủ 3 lần Pikachu sẽ ghé thăm lấy trộm bánh ngẫu nhiên!</p>
           </div>
 
-          <!-- Cột Điều khiển -->
+          <!-- Cột 2: Bộ Điều Khiển & Chọn Thời Gian (4 Cột) -->
           <div class="lg:col-span-4 bg-slate-50 p-4 pixel-box flex flex-col justify-between space-y-3">
-            <div class="text-center bg-slate-900 text-emerald-400 p-2 pixel-box">
-              <div id="timerDisplay" class="text-4xl font-bold tracking-widest pixel-font">25:00</div>
+            <div class="text-center bg-slate-900 text-emerald-400 p-3 pixel-box">
+              <div id="modeDisplay" class="text-xs text-slate-400 uppercase tracking-widest mb-1 pixel-font">Chế độ: Tập trung</div>
+              <div id="timerDisplay" class="text-5xl font-bold tracking-widest pixel-font">25:00</div>
             </div>
+
+            <!-- Thanh chọn thời gian đơn giản -->
             <div class="space-y-1 pixel-font">
               <label class="text-xs font-bold text-slate-600 uppercase">Chọn nhanh:</label>
-              <div class="grid grid-cols-4 gap-1">
-                <button onclick="setTimePreset(15)" class="bg-white hover:bg-emerald-100 py-1 text-center text-sm font-bold pixel-btn">15p</button>
-                <button onclick="setTimePreset(25)" class="bg-emerald-100 hover:bg-emerald-200 py-1 text-center text-sm font-bold pixel-btn">25p</button>
-                <button onclick="setTimePreset(45)" class="bg-white hover:bg-emerald-100 py-1 text-center text-sm font-bold pixel-btn">45p</button>
-                <button onclick="setTimePreset(60)" class="bg-white hover:bg-emerald-100 py-1 text-center text-sm font-bold pixel-btn">60p</button>
+              <div class="grid grid-cols-4 gap-1.5">
+                <button onclick="setTimePreset(15)" class="bg-white hover:bg-emerald-100 py-1.5 text-center text-base font-bold pixel-btn">15p</button>
+                <button onclick="setTimePreset(25)" class="bg-emerald-100 hover:bg-emerald-200 py-1.5 text-center text-base font-bold pixel-btn border-emerald-500">25p</button>
+                <button onclick="setTimePreset(45)" class="bg-white hover:bg-emerald-100 py-1.5 text-center text-base font-bold pixel-btn">45p</button>
+                <button onclick="setTimePreset(60)" class="bg-white hover:bg-emerald-100 py-1.5 text-center text-base font-bold pixel-btn">60p</button>
               </div>
             </div>
+
+            <!-- Ô chỉnh phút tùy chọn -->
             <div class="flex items-center gap-2 pixel-font text-xs">
-              <label class="font-bold">Tự chỉnh:</label>
-              <input type="number" id="customMinutesInput" value="25" min="1" max="120" class="w-16 p-1 text-center border-2 border-slate-800 text-sm font-bold"> phút
-              <button onclick="applyCustomTime()" class="bg-amber-200 hover:bg-amber-300 px-2 py-1 font-bold pixel-btn ml-auto">Áp dụng</button>
+              <label class="font-bold text-slate-600 uppercase">Tự chỉnh:</label>
+              <input type="number" id="customMinutesInput" value="25" min="1" max="120" class="w-16 p-1 text-center border-2 border-slate-800 text-base font-bold">
+              <span class="font-bold">phút</span>
+              <button onclick="applyCustomTime()" class="bg-amber-200 hover:bg-amber-300 px-3 py-1 font-bold pixel-btn ml-auto">Áp dụng</button>
             </div>
+
+            <!-- Nút điều khiển -->
             <div class="flex gap-2 pt-1 pixel-font">
-              <button onclick="startTimer()" class="flex-1 bg-emerald-400 hover:bg-emerald-500 text-slate-900 font-bold py-1.5 text-base pixel-btn">BẮT ĐẦU</button>
-              <button onclick="pauseTimer()" class="flex-1 bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold py-1.5 text-base pixel-btn">TẠM DỪNG</button>
-              <button onclick="resetTimer()" class="bg-rose-400 hover:bg-rose-500 text-slate-900 font-bold px-3 py-1.5 text-base pixel-btn">ĐẶT LẠI</button>
+              <button onclick="startTimer()" class="flex-1 bg-emerald-400 hover:bg-emerald-500 text-slate-900 font-bold py-2 text-lg pixel-btn">BẮT ĐẦU</button>
+              <button onclick="pauseTimer()" class="flex-1 bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold py-2 text-lg pixel-btn">TẠM DỪNG</button>
+              <button onclick="resetTimer()" class="bg-rose-400 hover:bg-rose-500 text-slate-900 font-bold px-3 py-2 text-lg pixel-btn">ĐẶT LẠI</button>
             </div>
           </div>
 
-          <!-- Cột BXH Mochi -->
+          <!-- Cột 3: Bảng Xếp Hạng Mochi Nhóm (3 Cột) -->
           <div class="lg:col-span-3 bg-amber-100/60 p-4 pixel-box flex flex-col justify-between">
             <div>
-              <h4 class="text-lg font-bold text-slate-900 border-b-2 border-slate-800 pb-1 mb-2 pixel-font flex justify-between">
+              <h4 class="text-xl font-bold text-slate-900 border-b-2 border-slate-800 pb-2 mb-3 pixel-font flex justify-between">
                 <span>🏆 BXH MOCHI</span>
                 <span class="text-xs text-slate-500">Realtime</span>
               </h4>
-              <ul id="leaderboardList" class="space-y-1.5 text-xs pixel-font">
+              <ul id="leaderboardList" class="space-y-2 text-sm pixel-font">
                 <li class="p-2 text-center text-slate-400 italic">Đang tải...</li>
               </ul>
             </div>
-            <p class="text-[10px] text-slate-500 text-center italic mt-1">Đăng nhập Google để lưu Mochi lên BXH!</p>
+            <p class="text-[10px] text-slate-500 text-center italic mt-2">Đăng nhập Google ở góc trang để lưu Mochi lên BXH!</p>
           </div>
-        </div>
-      </div>
 
-      <!-- Danh sách thành viên -->
-      <div class="space-y-4">
-        <h3 class="text-xl font-bold text-slate-900">Thành Viên Nhóm</h3>
-        <div id="membersGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"></div>
+        </div>
       </div>
     </section>
 
-    <!-- BÀI TẬP -->
+    <!-- TAB 2: BÀI TẬP -->
     <section id="tab-assignments" class="tab-content space-y-6">
+      
+      <!-- List View -->
       <div id="assignmentListView" class="space-y-6">
-        <div class="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <h2 class="text-2xl font-bold text-slate-900">Danh Sách Bài Tập</h2>
-          <button onclick="addNewAssignment()" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">+ Thêm Bài Tập</button>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">Danh Sách Bài Tập</h2>
+            <p class="text-slate-500 text-sm">Bấm vào ô để xem phần Luyện tập & Vận dụng</p>
+          </div>
+          <button onclick="addNewAssignment()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg text-sm flex items-center gap-2 shadow-sm transition">
+            <i data-lucide="plus" class="w-4 h-4"></i> Thêm Bài Tập Mới
+          </button>
         </div>
-        <div id="assignmentsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+
+        <div id="assignmentsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <!-- Rendered via JS -->
+        </div>
       </div>
 
+      <!-- Detail View -->
       <div id="assignmentDetailView" class="hidden space-y-6">
         <div class="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <button onclick="closeAssignmentDetail()" class="text-emerald-600 font-medium text-sm">← Quay lại danh sách</button>
-          <button onclick="saveCurrentAssignmentDetail()" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">Lưu & Đồng Bộ Với Cả Nhóm</button>
+          <button onclick="closeAssignmentDetail()" class="text-slate-600 hover:text-emerald-600 font-medium text-sm flex items-center gap-2 transition">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Quay lại danh sách
+          </button>
+          <button onclick="saveCurrentAssignmentDetail()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg text-sm flex items-center gap-2 shadow-sm transition">
+            <i data-lucide="save" class="w-4 h-4"></i> Lưu & Đồng Bộ Cho Cả Nhóm
+          </button>
         </div>
+
         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-          <input type="text" id="detailTitleInput" class="w-full text-2xl font-bold border-b pb-2 focus:outline-none">
+          <div class="border-b border-slate-100 pb-4">
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Tên Bài Tập</label>
+            <input type="text" id="detailTitleInput" class="w-full text-2xl font-bold text-slate-900 border-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 rounded-lg p-1 bg-slate-50">
+          </div>
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 space-y-2">
-              <h4 class="font-bold text-emerald-800">Phần 1: Luyện Tập</h4>
-              <textarea id="detailPracticeInput" rows="8" class="w-full p-3 border rounded-lg text-sm focus:outline-none"></textarea>
+            <!-- Phần 1: Luyện tập -->
+            <div class="bg-emerald-50/50 border border-emerald-100 p-5 rounded-xl space-y-3">
+              <div class="flex items-center gap-2 text-emerald-800 font-bold text-lg border-b border-emerald-200/60 pb-2">
+                <i data-lucide="pen-tool" class="w-5 h-5 text-emerald-600"></i> Phần 1: Luyện Tập
+              </div>
+              <p class="text-xs text-slate-500">Nội dung câu hỏi, bài tập tự luyện...</p>
+              <textarea id="detailPracticeInput" rows="10" placeholder="Nhập nội dung Luyện tập..." class="w-full p-3 text-sm bg-white border border-emerald-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-y"></textarea>
             </div>
-            <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100 space-y-2">
-              <h4 class="font-bold text-blue-800">Phần 2: Vận Dụng</h4>
-              <textarea id="detailApplicationInput" rows="8" class="w-full p-3 border rounded-lg text-sm focus:outline-none"></textarea>
+
+            <!-- Phần 2: Vận dụng -->
+            <div class="bg-blue-50/50 border border-blue-100 p-5 rounded-xl space-y-3">
+              <div class="flex items-center gap-2 text-blue-800 font-bold text-lg border-b border-blue-200/60 pb-2">
+                <i data-lucide="rocket" class="w-5 h-5 text-blue-600"></i> Phần 2: Vận Dụng
+              </div>
+              <p class="text-xs text-slate-500">Bài tập nâng cao, liên hệ thực tế...</p>
+              <textarea id="detailApplicationInput" rows="10" placeholder="Nhập nội dung Vận dụng..." class="w-full p-3 text-sm bg-white border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"></textarea>
             </div>
           </div>
         </div>
       </div>
+
     </section>
 
-    <!-- THUYẾT TRÌNH -->
+    <!-- TAB 3: BÀI THUYẾT TRÌNH -->
     <section id="tab-presentations" class="tab-content space-y-6">
-      <div class="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-        <h2 class="text-2xl font-bold text-slate-900">Bài Thuyết Trình</h2>
-        <button onclick="addNewPresentation()" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">+ Thêm Bài</button>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900">Bài Thuyết Trình</h2>
+          <p class="text-slate-500 text-sm">Danh sách Slide, Video và Tài liệu thuyết trình</p>
+        </div>
+        <button onclick="addNewPresentation()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg text-sm flex items-center gap-2 shadow-sm transition">
+          <i data-lucide="plus" class="w-4 h-4"></i> Thêm Bài Thuyết Trình
+        </button>
       </div>
-      <div id="presentationsList" class="space-y-4"></div>
+
+      <div id="presentationsList" class="space-y-4">
+        <!-- Rendered via JS -->
+      </div>
     </section>
 
-    <!-- CÀI ĐẶT -->
-    <section id="tab-settings" class="tab-content space-y-6 max-w-2xl mx-auto">
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-        <h2 class="text-xl font-bold border-b pb-3">Cài Đặt Thông Tin Nhóm</h2>
+    <!-- TAB 4: CÀI ĐẶT NHÓM -->
+    <section id="tab-settings" class="tab-content space-y-6 max-w-3xl mx-auto">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+        <h2 class="text-xl font-bold text-slate-900 border-b pb-3 flex items-center gap-2">
+          <i data-lucide="sliders" class="w-5 h-5 text-emerald-600"></i> Cài Đặt Thông Tin Nhóm & Logo
+        </h2>
+
         <form onsubmit="saveSettings(event)" class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium">Tên Nhóm</label>
-            <input type="text" id="settingGroupName" class="w-full p-2 border rounded-lg mt-1">
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-slate-700">Logo Nhóm / Biểu Tượng</label>
+            <div class="flex items-center gap-4">
+              <div id="settingsLogoPreview" class="w-16 h-16 rounded-xl overflow-hidden bg-emerald-500 text-white flex items-center justify-center font-bold text-2xl border">
+                N
+              </div>
+              <div class="space-y-1">
+                <input type="file" id="logoFileInput" accept="image/*" class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+                <p class="text-xs text-slate-400">Chọn ảnh vuông từ máy tính</p>
+              </div>
+            </div>
           </div>
+
           <div>
-            <label class="block text-sm font-medium">Slogan</label>
-            <input type="text" id="settingSlogan" class="w-full p-2 border rounded-lg mt-1">
+            <label class="block text-sm font-medium text-slate-700 mb-1">Tên Nhóm</label>
+            <input type="text" id="settingGroupName" class="w-full p-2.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
           </div>
+
           <div>
-            <label class="block text-sm font-medium">Đề tài</label>
-            <input type="text" id="settingTopic" class="w-full p-2 border rounded-lg mt-1">
+            <label class="block text-sm font-medium text-slate-700 mb-1">Slogan</label>
+            <input type="text" id="settingSlogan" class="w-full p-2.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
           </div>
+
           <div>
-            <label class="block text-sm font-medium">Mô tả nhóm</label>
-            <textarea id="settingDescription" rows="3" class="w-full p-2 border rounded-lg mt-1"></textarea>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Đề Tài / Lĩnh Vực Hoạt Động</label>
+            <input type="text" id="settingTopic" class="w-full p-2.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
           </div>
-          <button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded-lg font-medium">Lưu Cài Đặt</button>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Mô Tả Giới Thiệu Nhóm</label>
+            <textarea id="settingDescription" rows="4" class="w-full p-2.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
+          </div>
+
+          <div class="pt-2 flex justify-end">
+            <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-6 py-2.5 rounded-lg text-sm flex items-center gap-2 shadow-md transition">
+              <i data-lucide="check" class="w-4 h-4"></i> Lưu Cài Đặt (Đồng bộ nhóm)
+            </button>
+          </div>
         </form>
       </div>
     </section>
+
   </main>
 
-  <!-- SCRIPT -->
+  <!-- MODAL: Chỉnh sửa Thành viên -->
+  <div id="memberModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+      <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+        <i data-lucide="user-cog" class="w-5 h-5 text-emerald-600"></i> Chỉnh Sửa Thành Viên
+      </h3>
+      
+      <form onsubmit="saveMember(event)" class="space-y-3">
+        <input type="hidden" id="memberIndex">
+        
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Ảnh Đại Diện (Avatar)</label>
+          <div class="flex items-center gap-3">
+            <img id="memberAvatarPreview" class="w-12 h-12 rounded-full object-cover border border-slate-200">
+            <input type="file" id="memberAvatarInput" accept="image/*" class="text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-emerald-50 file:text-emerald-700">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Họ & Tên</label>
+          <input type="text" id="memberNameInput" required class="w-full p-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Chức Vụ / Vị Trí</label>
+          <input type="text" id="memberRoleInput" required class="w-full p-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Mô Tả / Profile</label>
+          <textarea id="memberBioInput" rows="3" class="w-full p-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeMemberModal()" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Hủy</button>
+          <button type="submit" class="px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium">Lưu Thay Đổi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-200 py-6 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 space-y-1">
+      <p>© <span id="footerYear"></span> - Trang Web Học Tập & Nhóm. Đồng bộ thời gian thực qua Firebase.</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT KẾT NỐI & VẬN HÀNH -->
   <script>
+    // CẤU HÌNH FIREBASE DỰ ÁN NHÓM
     const firebaseConfig = {
       apiKey: "AIzaSyApv1jF0H31be-bR22pjf9W5YPj0eaWMk",
       authDomain: "nhommotpha.firebaseapp.com",
@@ -232,23 +405,36 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const auth = firebase.auth();
+
     let currentUser = null;
 
+    // ĐĂNG NHẬP GOOGLE TOÀN TRANG
     function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       auth.signInWithPopup(provider).catch(err => alert("Lỗi đăng nhập: " + err.message));
     }
 
+    function logoutGoogle() {
+      auth.signOut().then(() => alert("Đã đăng xuất!"));
+    }
+
+    // Lắng nghe trạng thái đăng nhập hệ thống
     auth.onAuthStateChanged(user => {
       currentUser = user;
-      const userInfoDiv = document.getElementById('userInfo');
+      const authContainer = document.getElementById('globalAuthContainer');
       if (user) {
-        userInfoDiv.innerHTML = `
-          <div class="flex items-center gap-1.5">
-            <img src="${user.photoURL}" class="w-6 h-6 rounded-full border border-slate-800">
-            <span class="font-bold text-xs truncate max-w-[80px]">${user.displayName}</span>
+        authContainer.innerHTML = `
+          <div class="flex items-center gap-2 bg-slate-100 p-1 pl-2 pr-3 rounded-xl border border-slate-200">
+            <img src="${user.photoURL}" class="w-7 h-7 rounded-full object-cover border border-emerald-500">
+            <span class="font-bold text-xs text-slate-800 max-w-[100px] sm:max-w-[120px] truncate">${user.displayName}</span>
+            <button onclick="logoutGoogle()" title="Đăng xuất" class="text-slate-400 hover:text-red-500 text-xs font-semibold ml-1">
+              <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+            </button>
           </div>
         `;
+        lucide.createIcons();
+
+        // Lấy số bánh Mochi của tài khoản đã lưu
         db.ref(`leaderboard/${user.uid}`).once('value', snap => {
           if (snap.exists()) {
             totalMochi = snap.val().mochi || 0;
@@ -256,27 +442,34 @@
           }
         });
       } else {
-        userInfoDiv.innerHTML = `
-          <button onclick="loginWithGoogle()" class="bg-white hover:bg-slate-100 text-slate-800 text-xs font-bold px-3 py-1.5 pixel-btn flex items-center gap-1 pixel-font">
-            <img src="https://www.google.com/favicon.ico" class="w-3 h-3"> Đăng nhập
+        authContainer.innerHTML = `
+          <button onclick="loginWithGoogle()" class="bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 font-medium px-3 py-1.5 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow-sm transition">
+            <img src="https://www.google.com/favicon.ico" class="w-4 h-4">
+            <span>Đăng nhập Google</span>
           </button>
         `;
       }
     });
 
+    // Lắng nghe Bảng xếp hạng Realtime
     db.ref('leaderboard').on('value', snap => {
       const data = snap.val() || {};
       const listEl = document.getElementById('leaderboardList');
       const sorted = Object.values(data).sort((a,b) => b.mochi - a.mochi).slice(0, 5);
+
       if (sorted.length === 0) {
-        listEl.innerHTML = `<li class="p-1 text-center text-slate-400 italic">Chưa có dữ liệu</li>`;
+        listEl.innerHTML = `<li class="p-2 text-center text-slate-400 italic">Chưa có dữ liệu</li>`;
         return;
       }
+
       listEl.innerHTML = sorted.map((item, index) => {
         const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index+1}.`;
         return `
-          <li class="flex justify-between items-center bg-white p-1.5 pixel-box">
-            <span class="truncate max-w-[90px] font-bold">${medal} ${item.name}</span>
+          <li class="flex justify-between items-center bg-white p-2 pixel-box">
+            <div class="flex items-center gap-1.5 truncate max-w-[120px]">
+              <span class="font-bold">${medal}</span>
+              <span class="font-bold truncate">${item.name}</span>
+            </div>
             <span class="font-bold text-emerald-600">${item.mochi} 🍡</span>
           </li>
         `;
@@ -293,15 +486,37 @@
       }
     }
 
+    // DỮ LIỆU CŨ TRANG WEB
     const DEFAULT_DATA = {
-      group: { name: "Nhóm Một Phá", slogan: "Cùng nhau tiến bộ", topic: "Khoa học & Học tập", description: "Trang web lưu trữ bài tập và tài liệu chung của nhóm." },
-      members: Array.from({length: 5}, (_, i) => ({ name: `Thành Viên ${i+1}`, role: i===0?"Trưởng Nhóm":"Thành viên", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" })),
-      assignments: Array.from({ length: 28 }, (_, i) => ({ id: i + 1, title: `Bài ${i + 1}`, practice: "", application: "" })),
-      presentations: [{ id: 1, title: "Slide giới thiệu chung", date: "2026-10-24", link: "https://google.com" }]
+      group: {
+        name: "Nhóm Một Phá",
+        slogan: "Cùng nhau chinh phục tri thức!",
+        topic: "Khoa học & Học tập",
+        description: "Trang web lưu trữ bài tập, nội dung ôn luyện và tài liệu chung của nhóm.",
+        logo: ""
+      },
+      members: [
+        { name: "Thành Viên 1", role: "Trưởng Nhóm", bio: "Phụ trách tổng quan công việc.", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" },
+        { name: "Thành Viên 2", role: "Thư Ký", bio: "Ghi chép và tổng hợp bài tập.", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" },
+        { name: "Thành Viên 3", role: "Thuyết Trình Viên", bio: "Đại diện nhóm trình bày đề tài.", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" },
+        { name: "Thành Viên 4", role: "Nội Dung", bio: "Chuẩn bị phần luyện tập & vận dụng.", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" },
+        { name: "Thành Viên 5", role: "Kỹ Thuật", bio: "Quản lý slide và tài liệu.", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150" }
+      ],
+      assignments: Array.from({ length: 28 }, (_, i) => ({
+        id: i + 1,
+        title: `Bài ${i + 1}`,
+        practice: `Nội dung phần Luyện Tập cho Bài ${i + 1}.`,
+        application: `Nội dung phần Vận Dụng cho Bài ${i + 1}.`
+      })),
+      presentations: [
+        { id: 1, title: "Chủ đề 1: Tổng quan đề tài", date: "2026-10-24", link: "https://google.com", note: "Slide tuần 1" }
+      ]
     };
 
     let appData = DEFAULT_DATA;
-    let currentId = null;
+    let currentEditingAssignmentId = null;
+    let currentAvatarBase64 = "";
+    let currentLogoBase64 = "";
 
     db.ref('webData').on('value', (snapshot) => {
       const data = snapshot.val();
@@ -309,63 +524,137 @@
         appData = data;
       } else {
         db.ref('webData').set(DEFAULT_DATA);
+        appData = DEFAULT_DATA;
       }
       renderAll();
     });
 
-    function saveData() { db.ref('webData').set(appData); }
+    function saveDataToFirebase() {
+      db.ref('webData').set(appData);
+    }
 
-    function switchTab(id) {
+    function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(btn => btn.className = "nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:bg-slate-100");
-      document.getElementById(`tab-${id}`).classList.add('active');
-      document.getElementById(`nav-${id}`).className = "nav-btn px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-emerald-600 bg-emerald-50";
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('text-emerald-600', 'bg-emerald-50');
+        btn.classList.add('text-slate-600');
+      });
+
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+      const activeNav = document.getElementById(`nav-${tabId}`);
+      if (activeNav) {
+        activeNav.classList.add('text-emerald-600', 'bg-emerald-50');
+        activeNav.classList.remove('text-slate-600');
+      }
     }
 
     function renderAll() {
       const g = appData.group || DEFAULT_DATA.group;
       document.getElementById('brandNameDisplay').textContent = g.name;
       document.getElementById('brandSloganDisplay').textContent = g.slogan;
+
       document.getElementById('homeGroupName').textContent = g.name;
       document.getElementById('homeGroupSlogan').textContent = `"${g.slogan}"`;
       document.getElementById('homeTopic').textContent = g.topic;
       document.getElementById('homeDescription').textContent = g.description;
 
+      currentLogoBase64 = g.logo || "";
+      const logoContainers = [document.getElementById('brandLogoContainer'), document.getElementById('settingsLogoPreview')];
+      logoContainers.forEach(container => {
+        if (!container) return;
+        if (g.logo) {
+          container.innerHTML = `<img src="${g.logo}" class="w-full h-full object-cover rounded-xl">`;
+        } else {
+          container.innerHTML = g.name.charAt(0).toUpperCase();
+        }
+      });
+
       document.getElementById('settingGroupName').value = g.name;
       document.getElementById('settingSlogan').value = g.slogan;
       document.getElementById('settingTopic').value = g.topic;
       document.getElementById('settingDescription').value = g.description;
+      document.getElementById('footerYear').textContent = new Date().getFullYear();
 
-      const members = appData.members || [];
-      document.getElementById('membersGrid').innerHTML = members.map((m, i) => `
-        <div class="bg-white rounded-xl border p-4 shadow-sm flex flex-col items-center text-center space-y-2">
-          <img src="${m.avatar}" class="w-16 h-16 rounded-full object-cover">
-          <h4 class="font-bold text-sm">${m.name}</h4>
-          <span class="bg-emerald-50 text-emerald-700 text-xs px-2 py-0.5 rounded-full">${m.role}</span>
-        </div>`).join('');
-
-      const assignments = appData.assignments || [];
-      document.getElementById('assignmentsGrid').innerHTML = assignments.map(a => `
-        <div class="bg-white rounded-xl border p-4 shadow-sm flex flex-col justify-between space-y-3">
-          <div class="flex justify-between items-start"><h3 class="font-bold">${a.title}</h3></div>
-          <button onclick="openDetail(${a.id})" class="w-full bg-slate-50 hover:bg-emerald-600 hover:text-white text-slate-700 text-xs py-2 rounded-lg">Xem chi tiết</button>
-        </div>`).join('');
-
-      const presentations = appData.presentations || [];
-      document.getElementById('presentationsList').innerHTML = presentations.map(p => `
-        <div class="bg-white rounded-xl border p-4 shadow-sm flex justify-between items-center">
-          <div><h4 class="font-bold">${p.title}</h4><p class="text-xs text-slate-500">${p.date}</p></div>
-          <a href="${p.link}" target="_blank" class="text-emerald-600 text-xs font-medium underline">Mở Link</a>
-        </div>`).join('');
+      renderMembers();
+      renderAssignments();
+      renderPresentations();
+      lucide.createIcons();
     }
 
-    function openDetail(id) {
-      currentId = id;
-      let item = (appData.assignments || []).find(x => x.id === id);
-      if(!item) return;
+    function renderMembers() {
+      const grid = document.getElementById('membersGrid');
+      const members = appData.members || [];
+      grid.innerHTML = members.map((m, index) => `
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col items-center text-center space-y-3 relative group hover:border-emerald-300 transition">
+          <img src="${m.avatar}" class="w-20 h-20 rounded-full object-cover border-2 border-emerald-500/20 shadow-sm">
+          <div class="space-y-1">
+            <h4 class="font-bold text-slate-900 text-sm">${m.name}</h4>
+            <span class="inline-block bg-emerald-50 text-emerald-700 text-xs px-2 py-0.5 rounded-full font-medium border border-emerald-200">${m.role}</span>
+            <p class="text-xs text-slate-500 line-clamp-2 pt-1">${m.bio || 'Chưa có mô tả.'}</p>
+          </div>
+          <button onclick="openMemberModal(${index})" class="mt-auto text-xs bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-600 font-medium px-3 py-1.5 rounded-lg transition flex items-center gap-1 w-full justify-center">
+            <i data-lucide="edit-3" class="w-3 h-3"></i> Chỉnh sửa
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function renderAssignments() {
+      const grid = document.getElementById('assignmentsGrid');
+      const assignments = appData.assignments || [];
+      grid.innerHTML = assignments.map(a => `
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm hover:shadow-md hover:border-emerald-400 transition flex flex-col justify-between space-y-3 group">
+          <div class="flex items-start justify-between gap-2">
+            <h3 class="font-bold text-slate-800 group-hover:text-emerald-600 transition text-base">${a.title}</h3>
+            <button onclick="deleteAssignment(${a.id})" title="Xóa bài" class="text-slate-300 hover:text-red-500 p-1 rounded transition">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <p class="text-xs text-slate-400 line-clamp-1">Gồm phần Luyện tập & Vận dụng</p>
+          <button onclick="openAssignmentDetail(${a.id})" class="w-full bg-slate-50 group-hover:bg-emerald-600 group-hover:text-white text-slate-700 font-medium text-xs py-2 rounded-lg transition flex items-center justify-center gap-1">
+            Xem chi tiết <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function renderPresentations() {
+      const list = document.getElementById('presentationsList');
+      const presentations = appData.presentations || [];
+      if (presentations.length === 0) {
+        list.innerHTML = `<div class="p-8 text-center text-slate-400 bg-white rounded-xl border border-slate-200">Chưa có bài thuyết trình nào.</div>`;
+        return;
+      }
+      list.innerHTML = presentations.map((p, index) => `
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <h4 class="font-bold text-slate-900">${p.title}</h4>
+            <div class="flex items-center gap-3 text-xs text-slate-500">
+              <span><i data-lucide="calendar" class="w-3.5 h-3.5 inline"></i> ${p.date}</span>
+              <span>${p.note || ''}</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <a href="${p.link}" target="_blank" class="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-medium px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 transition">
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Mở Link Slide
+            </a>
+            <button onclick="deletePresentation(${index})" class="text-slate-400 hover:text-red-500 p-1.5 rounded">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openAssignmentDetail(id) {
+      currentEditingAssignmentId = id;
+      const item = (appData.assignments || []).find(a => a.id === id);
+      if (!item) return;
+
       document.getElementById('detailTitleInput').value = item.title;
       document.getElementById('detailPracticeInput').value = item.practice || "";
       document.getElementById('detailApplicationInput').value = item.application || "";
+
       document.getElementById('assignmentListView').classList.add('hidden');
       document.getElementById('assignmentDetailView').classList.remove('hidden');
     }
@@ -373,54 +662,140 @@
     function closeAssignmentDetail() {
       document.getElementById('assignmentDetailView').classList.add('hidden');
       document.getElementById('assignmentListView').classList.remove('hidden');
+      currentEditingAssignmentId = null;
     }
 
     function saveCurrentAssignmentDetail() {
-      let item = (appData.assignments || []).find(x => x.id === currentId);
-      if(item) {
-        item.title = document.getElementById('detailTitleInput').value;
+      if (!currentEditingAssignmentId) return;
+      const item = (appData.assignments || []).find(a => a.id === currentEditingAssignmentId);
+      if (item) {
+        item.title = document.getElementById('detailTitleInput').value.trim() || item.title;
         item.practice = document.getElementById('detailPracticeInput').value;
         item.application = document.getElementById('detailApplicationInput').value;
-        saveData();
-        alert('Đã đồng bộ lên hệ thống cho cả nhóm!');
+        saveDataToFirebase();
+        alert('Đã lưu và đồng bộ thành công cho cả nhóm!');
         closeAssignmentDetail();
       }
     }
 
     function addNewAssignment() {
-      let title = prompt("Nhập tên bài tập:", `Bài ${(appData.assignments || []).length + 1}`);
-      if(title) {
-        if(!appData.assignments) appData.assignments = [];
-        appData.assignments.push({ id: Date.now(), title, practice: "", application: "" });
-        saveData();
+      const nextNum = (appData.assignments || []).length + 1;
+      const newTitle = prompt("Nhập tên bài tập mới:", `Bài ${nextNum}`);
+      if (newTitle) {
+        if (!appData.assignments) appData.assignments = [];
+        appData.assignments.push({
+          id: Date.now(),
+          title: newTitle,
+          practice: "",
+          application: ""
+        });
+        saveDataToFirebase();
       }
     }
+
+    function deleteAssignment(id) {
+      if (confirm("Bạn có chắc chắn muốn xóa bài tập này?")) {
+        appData.assignments = appData.assignments.filter(a => a.id !== id);
+        saveDataToFirebase();
+      }
+    }
+
+    function openMemberModal(index) {
+      const m = appData.members[index];
+      document.getElementById('memberIndex').value = index;
+      document.getElementById('memberNameInput').value = m.name;
+      document.getElementById('memberRoleInput').value = m.role;
+      document.getElementById('memberBioInput').value = m.bio || "";
+      document.getElementById('memberAvatarPreview').src = m.avatar;
+      currentAvatarBase64 = m.avatar;
+
+      document.getElementById('memberModal').classList.remove('hidden');
+    }
+
+    function closeMemberModal() {
+      document.getElementById('memberModal').classList.add('hidden');
+    }
+
+    document.getElementById('memberAvatarInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          currentAvatarBase64 = evt.target.result;
+          document.getElementById('memberAvatarPreview').src = currentAvatarBase64;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function saveMember(e) {
+      e.preventDefault();
+      const idx = document.getElementById('memberIndex').value;
+      if (!appData.members) appData.members = [];
+      appData.members[idx] = {
+        name: document.getElementById('memberNameInput').value,
+        role: document.getElementById('memberRoleInput').value,
+        bio: document.getElementById('memberBioInput').value,
+        avatar: currentAvatarBase64
+      };
+      saveDataToFirebase();
+      closeMemberModal();
+    }
+
+    document.getElementById('logoFileInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          currentLogoBase64 = evt.target.result;
+          document.getElementById('settingsLogoPreview').innerHTML = `<img src="${currentLogoBase64}" class="w-full h-full object-cover rounded-xl">`;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
 
     function saveSettings(e) {
       e.preventDefault();
-      appData.group = {
-        name: document.getElementById('settingGroupName').value,
-        slogan: document.getElementById('settingSlogan').value,
-        topic: document.getElementById('settingTopic').value,
-        description: document.getElementById('settingDescription').value
-      };
-      saveData();
-      alert('Đã cập nhật thông tin nhóm cho cả hệ thống!');
+      if (!appData.group) appData.group = {};
+      appData.group.name = document.getElementById('settingGroupName').value;
+      appData.group.slogan = document.getElementById('settingSlogan').value;
+      appData.group.topic = document.getElementById('settingTopic').value;
+      appData.group.description = document.getElementById('settingDescription').value;
+      if (currentLogoBase64) {
+        appData.group.logo = currentLogoBase64;
+      }
+      saveDataToFirebase();
+      alert("Đã lưu cài đặt và đồng bộ thành công cho cả nhóm!");
     }
 
     function addNewPresentation() {
-      let title = prompt("Nhập tên bài thuyết trình:");
-      let link = prompt("Nhập link slide:", "https://");
-      if(title && link) {
-        if(!appData.presentations) appData.presentations = [];
-        appData.presentations.push({ id: Date.now(), title, date: new Date().toLocaleDateString(), link });
-        saveData();
+      const title = prompt("Nhập tiêu đề bài thuyết trình:");
+      if (!title) return;
+      const link = prompt("Nhập đường link slide/video (Google Slides, Canva...):", "https://");
+      if (!link) return;
+
+      if (!appData.presentations) appData.presentations = [];
+      appData.presentations.push({
+        id: Date.now(),
+        title: title,
+        date: new Date().toISOString().split('T')[0],
+        link: link,
+        note: "Bài thuyết trình nhóm"
+      });
+      saveDataToFirebase();
+    }
+
+    function deletePresentation(index) {
+      if (confirm("Xóa bài thuyết trình này?")) {
+        appData.presentations.splice(index, 1);
+        saveDataToFirebase();
       }
     }
 
-    // CANVAS THỎ & PIKACHU ANIMATION
+    // LOGIC CÔNG CỤ POMODORO THỎ & PIKACHU MOCHI
     const canvas = document.getElementById('mochiCanvas');
     const ctx = canvas.getContext('2d');
+
     let state = 'SLEEPING'; 
     let rabbitX = 35;
     let frame = 0;
@@ -436,6 +811,7 @@
 
     function render() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       ctx.fillStyle = "#fef3c7";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = "#fde68a";
@@ -447,7 +823,7 @@
       ctx.fillStyle = "#fef08a";
       ctx.fillRect(25, 96, 35, 12);
 
-      // Cối Mochi
+      // Cối giã Mochi
       ctx.fillStyle = "#78350f";
       ctx.fillRect(220, 85, 45, 35);
       ctx.fillStyle = "#451a03";
@@ -567,7 +943,7 @@
         } else {
           clearInterval(timer);
           timer = null;
-          alert(`🎉 Hoàn thành phiên học! Nhận được ${mochiOnTable} bánh Mochi!`);
+          alert(`🎉 Xuất sắc! Bạn hoàn thành phiên học và giữ được ${mochiOnTable} bánh Mochi!`);
           state = 'WALKING_BACK';
           elapsedSeconds = 0;
           mochiOnTable = 0;
@@ -594,7 +970,7 @@
           totalMochi = Math.max(0, totalMochi - stolenCount);
           mochiOnTable = Math.max(0, mochiOnTable - stolenCount);
           saveMochiToFirebase();
-          alert(`⚡ Pikachu lấy trộm mất ${stolenCount} bánh Mochi!`);
+          alert(`⚡ Ôi không! Pikachu xuất hiện và lấy trộm mất ${stolenCount} bánh Mochi!`);
           state = 'WALKING_BACK';
           updateDisplay();
         }, 1800);
